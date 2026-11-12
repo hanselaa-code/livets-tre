@@ -73,6 +73,10 @@ export interface ControlQuestionItem {
   takeaway: string;
 }
 
+const evoImg = (file: string): string =>
+  (globalThis as unknown as { __EVO_IMGS__?: Record<string, string> }).__EVO_IMGS__?.[file] ??
+  `./images/evolution/${file}`;
+
 export const MAIN_STEP_IDS: string[] = [
   'luca',
   'eukaryotes',
@@ -104,7 +108,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 250,
     y: 1140,
     labelAnchor: 'bottom',
-    image: './images/evolution/origin.png',
+    image: evoImg('origin.png'),
     imageCaption: 'Hydrotermiske skorsteiner på havbunnen for 3,7 milliarder år siden – et sannsynlig vugge-miljø for det første livet.',
     summaryTitle: 'En felles stamfar for alt liv på jorda',
     whatHappens:
@@ -144,7 +148,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 120,
     y: 965,
     labelAnchor: 'top',
-    image: './images/evolution/origin.png',
+    image: evoImg('origin.png'),
     imageCaption: 'Arker trives ofte i ekstreme miljøer som kokende undersjøiske kilder, saltsjøer og oksygenfrie sedimenter.',
     summaryTitle: 'Mestere i ekstreme miljøer – og eukaryotenes nære slektning',
     whatHappens:
@@ -179,7 +183,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 430,
     y: 1185,
     labelAnchor: 'right',
-    image: './images/evolution/origin.png',
+    image: evoImg('origin.png'),
     imageCaption: 'Eubakterier koloniserte raskt hele kloden – senere fylte cyanobakterier atmosfæren med oksygen.',
     summaryTitle: 'Klodens kjemiske ingeniører og oksygenprodusenter',
     whatHappens:
@@ -219,7 +223,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 425,
     y: 980,
     labelAnchor: 'bottom',
-    image: './images/evolution/eukaryotes.png',
+    image: evoImg('eukaryotes.png'),
     imageCaption: 'Kompleks eukaryot celle med tydelig cellekjerne, mitokondrier og indre membransystemer.',
     summaryTitle: 'Cellerevolusjonen: Kjerne og egne kraftverk',
     whatHappens:
@@ -259,7 +263,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 245,
     y: 810,
     labelAnchor: 'top',
-    image: './images/evolution/plants_fungi.png',
+    image: evoImg('plants_fungi.png'),
     imageCaption: 'Sopp og tidlige landplanter samarbeidet tett da de første økosystemene på land ble etablert.',
     summaryTitle: 'Naturens resirkulerere – nærmere dyr enn planter',
     whatHappens:
@@ -294,7 +298,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 625,
     y: 1055,
     labelAnchor: 'bottom',
-    image: './images/evolution/plants_fungi.png',
+    image: evoImg('plants_fungi.png'),
     imageCaption: 'Fra fotosyntetiserende alger i havet gikk utviklingen videre mot de første grønne landplantene.',
     summaryTitle: 'Solenergi fanges i kloroplaster',
     whatHappens:
@@ -329,7 +333,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 845,
     y: 1105,
     labelAnchor: 'bottom',
-    image: './images/evolution/plants_fungi.png',
+    image: evoImg('plants_fungi.png'),
     imageCaption: 'Moser, bregner og sopp forvandlet golde steinkontinenter til grønne, fuktige økosystemer.',
     summaryTitle: 'Kontinentene blir grønne – grunnlaget for dyreliv på land',
     whatHappens:
@@ -369,7 +373,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 590,
     y: 830,
     labelAnchor: 'bottom',
-    image: './images/evolution/animals_invertebrates.png',
+    image: evoImg('animals_invertebrates.png'),
     imageCaption: 'Yrende kambrisk havbunn med tidlige blekkspruter, trilobitter, bløtdyr og svamper.',
     summaryTitle: 'Flercellede bevegelige jegere og filtrerere',
     whatHappens:
@@ -409,7 +413,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 415,
     y: 690,
     labelAnchor: 'right',
-    image: './images/evolution/animals_invertebrates.png',
+    image: evoImg('animals_invertebrates.png'),
     imageCaption: 'Protostomene omfatter det overveldende flertallet av alle nålevende dyrearter, inkludert bløtdyr og leddyr.',
     summaryTitle: 'Den største forgreningen blant tosidig symmetriske dyr',
     whatHappens:
@@ -444,7 +448,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 185,
     y: 680,
     labelAnchor: 'bottom',
-    image: './images/evolution/animals_invertebrates.png',
+    image: evoImg('animals_invertebrates.png'),
     imageCaption: 'Tidlige skallkledde blekkspruter var blant topprovdyrene i urhavet, side om side med muslinger og snegler.',
     summaryTitle: 'Fra filtrerende muslinger til lynintelligente blekkspruter',
     whatHappens:
@@ -479,7 +483,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 285,
     y: 540,
     labelAnchor: 'top',
-    image: './images/evolution/animals_invertebrates.png',
+    image: evoImg('animals_invertebrates.png'),
     imageCaption: 'Trilobitter og tidlige krepsdyr banet vei for jordas mest artsrike dyregruppe: leddyrene.',
     summaryTitle: 'Ytre rustning og leddede bein – klodens største suksesshistorie',
     whatHappens:
@@ -519,7 +523,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 775,
     y: 705,
     labelAnchor: 'top',
-    image: './images/evolution/vertebrates.png',
+    image: evoImg('vertebrates.png'),
     imageCaption: 'Tidlige kjevefisker, bruskfisker (hai) og beinfisker (ørret) viser styrken ved indre skjelett og ryggrad.',
     summaryTitle: 'Ryggrad, kranium og indre skjelett gir fart og størrelse',
     whatHappens:
@@ -559,7 +563,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 985,
     y: 825,
     labelAnchor: 'bottom',
-    image: './images/evolution/vertebrates.png',
+    image: evoImg('vertebrates.png'),
     imageCaption: 'Haier har patruljert verdenshavene med et lett og smidig bruskskjelett i over 400 millioner år.',
     summaryTitle: 'Havets strømlinjeformede jegere med bruskskjelett',
     whatHappens:
@@ -594,7 +598,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1055,
     y: 705,
     labelAnchor: 'right',
-    image: './images/evolution/vertebrates.png',
+    image: evoImg('vertebrates.png'),
     imageCaption: 'Beinfisker som ørret og korallrevfisker dominerer både ferskvann og verdenshav med svømmeblære og beinskjelett.',
     summaryTitle: 'Forbeinet skjelett og gassfylt svømmeblære',
     whatHappens:
@@ -634,7 +638,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 945,
     y: 570,
     labelAnchor: 'bottom',
-    image: './images/evolution/tetrapods.png',
+    image: evoImg('tetrapods.png'),
     imageCaption: 'Overgangsformen Tiktaalik (375 ma) med kjøttfulle brystfinner, håndledd, bevegelig nakke og lunger på grunt vann.',
     summaryTitle: 'Finner blir til fire bein – virveldyrene erobrer landjorda',
     whatHappens:
@@ -674,7 +678,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 720,
     y: 465,
     labelAnchor: 'bottom',
-    image: './images/evolution/tetrapods.png',
+    image: evoImg('tetrapods.png'),
     imageCaption: 'Amfibiene lever et dobbeltliv mellom vann og land, med fuktig hud og geléegg i ferskvann.',
     summaryTitle: 'Det evolusjonære dobbeltlivet mellom vann og land',
     whatHappens:
@@ -709,7 +713,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 840,
     y: 360,
     labelAnchor: 'top',
-    image: './images/evolution/reptiles_birds.png',
+    image: evoImg('reptiles_birds.png'),
     imageCaption: 'Skjellkledd reptil og fjærkledd rovdinosaur/urfugl (Archaeopteryx-type) i mesozoisk skog.',
     summaryTitle: 'Skallegget frigjør dyrene fra vannet – og dinosaurene tar til vingene',
     whatHappens:
@@ -749,7 +753,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1125,
     y: 455,
     labelAnchor: 'bottom',
-    image: './images/evolution/mammals.png',
+    image: evoImg('mammals.png'),
     imageCaption: 'Tidlig spissmus-lignende pattedyr i skogbunnen som varmer og ammer ungene sine i ly av natten.',
     summaryTitle: 'Varmblodighet, isolerende pels og livgivende morsmelk',
     whatHappens:
@@ -789,7 +793,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1335,
     y: 560,
     labelAnchor: 'bottom',
-    image: './images/evolution/mammals.png',
+    image: evoImg('mammals.png'),
     imageCaption: 'Pungdyr føder ørsmå unger etter kort drektighet; resten av fosterutviklingen skjer trygt ved patten i pungen.',
     summaryTitle: 'Kort svangerskap og trygg oppvekst i mors pung',
     whatHappens:
@@ -829,7 +833,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1300,
     y: 345,
     labelAnchor: 'bottom',
-    image: './images/evolution/placentals.png',
+    image: evoImg('placentals.png'),
     imageCaption: 'Etter at dinosaurene døde ut fylte morkakedyrene alle nisjer: rovdyr, beitedyr på land og kjempehvaler i havet.',
     summaryTitle: 'Morkaken gir lang, beskyttet fosterutvikling i livmoren',
     whatHappens:
@@ -869,7 +873,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1070,
     y: 265,
     labelAnchor: 'bottom',
-    image: './images/evolution/placentals.png',
+    image: evoImg('placentals.png'),
     imageCaption: 'Gnagerne er den mest artsrike ordenen blant pattedyrene og står evolusjonært relativt nær primat-linjen.',
     summaryTitle: 'Rotåpne meisel-tenner og imponerende tilpasningsevne',
     whatHappens:
@@ -904,7 +908,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1170,
     y: 165,
     labelAnchor: 'top',
-    image: './images/evolution/placentals.png',
+    image: evoImg('placentals.png'),
     imageCaption: 'Ulv og andre rovdyr i ordenen Carnivora regulerer økosystemene med skarpe sanser og rovtannsett.',
     summaryTitle: 'Skarpe rovtann-sakser, smidighet og jaktintelligens',
     whatHappens:
@@ -939,7 +943,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1535,
     y: 435,
     labelAnchor: 'bottom',
-    image: './images/evolution/placentals.png',
+    image: evoImg('placentals.png'),
     imageCaption: 'Ville hester bærer kroppsvekten på den midterste tåen omsluttet av en slitesterk hov for hurtig flukt over slettene.',
     summaryTitle: 'Løpere på tåspissen med hov på midttåen',
     whatHappens:
@@ -974,7 +978,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1585,
     y: 325,
     labelAnchor: 'right',
-    image: './images/evolution/placentals.png',
+    image: evoImg('placentals.png'),
     imageCaption: 'Hjortedyr på kystengen og knølhvalen i havet deler en felles klovdyr-stamfar!',
     summaryTitle: 'Fra klovkledde drøvtyggere på land til gigantiske hvaler i havet',
     whatHappens:
@@ -1014,7 +1018,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1475,
     y: 235,
     labelAnchor: 'bottom',
-    image: './images/evolution/primates.png',
+    image: evoImg('primates.png'),
     imageCaption: 'Primater i tropisk regnskog med gripehender, negler og fremoverrettede øyne for presise hopp i trekronene.',
     summaryTitle: 'Skapt for et tredimensjonalt liv høyt i trærne',
     whatHappens:
@@ -1054,7 +1058,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1355,
     y: 100,
     labelAnchor: 'top',
-    image: './images/evolution/primates.png',
+    image: evoImg('primates.png'),
     imageCaption: 'Lemurer på Madagaskar og kapusineraper i Sør-Amerika viser primatenes smidighet og sosiale kløkt.',
     summaryTitle: 'Akrobater med balansehale og sterkt sosialt samhold',
     whatHappens:
@@ -1094,7 +1098,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1655,
     y: 155,
     labelAnchor: 'bottom',
-    image: './images/evolution/hominids.png',
+    image: evoImg('hominids.png'),
     imageCaption: 'Store menneskeaper uten hale med 360-graders fleksible skulderledd, redskapsbruk og dyp sosial intelligens.',
     summaryTitle: 'Uten hale, frie skulderledd og avansert sosial intelligens',
     whatHappens:
@@ -1134,7 +1138,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1845,
     y: 250,
     labelAnchor: 'bottom',
-    image: './images/evolution/hominids.png',
+    image: evoImg('hominids.png'),
     imageCaption: 'Orangutanger i Sørøst-Asia og gorillaer, sjimpanser og bonoboer i Afrika er våre nærmeste slektninger på kloden.',
     summaryTitle: 'Våre nærmeste slektninger i regnskogen',
     whatHappens:
@@ -1174,7 +1178,7 @@ export const TREE_NODES: TreeNodeData[] = [
     x: 1845,
     y: 85,
     labelAnchor: 'top',
-    image: './images/evolution/homo_sapiens.png',
+    image: evoImg('homo_sapiens.png'),
     imageCaption: 'Tidlige anatomisk moderne mennesker (Homo sapiens) på den afrikanske savannen ved soloppgang.',
     summaryTitle: 'Oppreist gange, språk, vitenskap og bevissthet om livets tre',
     whatHappens:

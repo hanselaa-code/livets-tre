@@ -1,3 +1,4 @@
+import { Minimize } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
@@ -15,6 +16,11 @@ export function App() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [lightboxNode, setLightboxNode] = useState<TreeNodeData | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isCinemaFallback, setIsCinemaFallback] = useState(false);
+
+  useEffect(() => {
+    window.focus();
+  }, []);
 
   const jumpToStep = useCallback((nextIdx: number) => {
     const clamped = Math.max(0, Math.min(MAIN_STEP_IDS.length - 1, nextIdx));
@@ -26,11 +32,9 @@ export function App() {
   const handleNext = useCallback(() => {
     if (isQuizOpen) return;
 
-    // If user is currently viewing a side branch of the current step, first check if we should advance
     if (currentStepIndex < MAIN_STEP_IDS.length - 1) {
       jumpToStep(currentStepIndex + 1);
     } else {
-      // On Step 10 (Homo sapiens), Next opens the Контроllspørsmål finale!
       setIsQuizOpen(true);
     }
   }, [currentStepIndex, isQuizOpen, jumpToStep]);
@@ -64,6 +68,11 @@ export function App() {
   }, []);
 
   const toggleFullscreen = useCallback(async () => {
+    if (isCinemaFallback) {
+      setIsCinemaFallback(false);
+      setIsFullscreen(false);
+      return;
+    }
     try {
       if (!document.fullscreenElement) {
         await document.documentElement.requestFullscreen();
@@ -71,10 +80,14 @@ export function App() {
         await document.exitFullscreen();
       }
     } catch {
-      // Fallback for restricted iframe contexts where browser blocks Fullscreen API
-      setIsFullscreen((prev) => !prev);
+      // In sandboxed preview iframes, toggle distraction-free cinema layout
+      setIsCinemaFallback((prev) => {
+        const next = !prev;
+        setIsFullscreen(next);
+        return next;
+      });
     }
-  }, []);
+  }, [isCinemaFallback]);
 
   useEffect(() => {
     const onFsChange = () => {
@@ -104,6 +117,11 @@ export function App() {
         }
         if (isQuizOpen) {
           setIsQuizOpen(false);
+          return;
+        }
+        if (isCinemaFallback) {
+          setIsCinemaFallback(false);
+          setIsFullscreen(false);
           return;
         }
       }
@@ -139,22 +157,34 @@ export function App() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [handleNext, handlePrev, isQuizOpen, lightboxNode, toggleFullscreen]);
+  }, [handleNext, handlePrev, isCinemaFallback, isQuizOpen, lightboxNode, toggleFullscreen]);
 
   const activeNode = NODE_MAP[selectedNodeId] ?? NODE_MAP[MAIN_STEP_IDS[0]];
 
   return (
-    <div className="min-h-screen lg:h-screen flex flex-col oceanic-canvas text-slate-100 overflow-x-hidden lg:overflow-hidden">
-      <TopBar
-        currentStepIndex={currentStepIndex}
-        showAllSteps={showAllSteps}
-        isQuizOpen={isQuizOpen}
-        isFullscreen={isFullscreen}
-        onToggleShowAll={() => setShowAllSteps((prev) => !prev)}
-        onToggleQuiz={() => setIsQuizOpen((prev) => !prev)}
-        onToggleFullscreen={() => void toggleFullscreen()}
-        onResetPresentation={handleResetPresentation}
-      />
+    <div className="min-h-screen lg:h-screen flex flex-col oceanic-canvas text-slate-100 overflow-x-hidden lg:overflow-hidden relative">
+      {!isCinemaFallback ? (
+        <TopBar
+          currentStepIndex={currentStepIndex}
+          showAllSteps={showAllSteps}
+          isQuizOpen={isQuizOpen}
+          isFullscreen={isFullscreen}
+          onToggleShowAll={() => setShowAllSteps((prev) => !prev)}
+          onToggleQuiz={() => setIsQuizOpen((prev) => !prev)}
+          onToggleFullscreen={() => void toggleFullscreen()}
+          onResetPresentation={handleResetPresentation}
+        />
+      ) : (
+        <button
+          id="btn-exit-cinema"
+          type="button"
+          onClick={() => void toggleFullscreen()}
+          className="fixed top-3 right-3 z-30 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/85 hover:bg-slate-900 border border-slate-700 text-xs font-bold text-emerald-300 shadow-lg cursor-pointer"
+        >
+          <Minimize className="w-3.5 h-3.5" />
+          <span>Vis toppmeny (F)</span>
+        </button>
+      )}
 
       {/* Main split classroom stage: Left/Top Interactive Tree + Right Info Card */}
       <main className="flex-1 min-h-0 p-3 sm:p-4 lg:px-6 lg:py-4 grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-[1920px] w-full mx-auto">
