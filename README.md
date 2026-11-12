@@ -1,5 +1,7 @@
 # Livets Tre – Fra LUCA til *Homo sapiens*
 
+🌐 **Live klasseromspresentasjon (GitHub Pages):** https://hanselaa-code.github.io/livets-tre/
+
 En moderne, interaktiv klasseromspresentasjon bygget med **React, TypeScript, Vite og Tailwind CSS** for undervisning i naturfag (Vg1) og biologi. Applikasjonen tar elevene steg for steg gjennom 3,7 milliarder års evolusjonshistorie – fra den felles ur-stamfaren **LUCA** ved hydrotermiske kilder på havbunnen og hele veien frem til primatene og det moderne mennesket (*Homo sapiens*).
 
 ---
