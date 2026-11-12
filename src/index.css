@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #0B1120;
+    --bg-elevated: #111A2E;
+    --bg-card: rgba(17, 26, 46, 0.78);
+    --accent-emerald: #10B981;
+    --accent-gold: #F59E0B;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    background-color: #0B1120;
+    color: #F8FAFC;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono-time {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+}
+
+/* Subtle organic ambient depth without grid clichés */
+.oceanic-canvas {
+  background:
+    radial-gradient(ellipse 80% 60% at 22% 85%, rgba(16, 185, 129, 0.08), transparent 65%),
+    radial-gradient(ellipse 65% 55% at 78% 18%, rgba(245, 158, 11, 0.07), transparent 65%),
+    linear-gradient(180deg, #090E1A 0%, #0B1120 55%, #0D1527 100%);
+}
+
+.glass-panel {
+  background: linear-gradient(165deg, rgba(20, 30, 52, 0.86) 0%, rgba(12, 19, 35, 0.92) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow:
+    0 20px 50px -15px rgba(2, 6, 23, 0.75),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-subtle {
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+/* Custom subtle scrollbars for info cards */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(11, 17, 32, 0.4);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.55);
+}
+
+/* SVG path draw & pulse animations */
+@keyframes branchDraw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0.25;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.animate-branch-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: branchDraw 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes softPulseRing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.75;
+  }
+  70% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.node-pulse-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: softPulseRing 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-card-enter {
+  animation: fadeSlideIn 320ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
