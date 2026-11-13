@@ -337,20 +337,20 @@ export function PhylogeneticTree({
       className="relative w-full h-full overflow-hidden rounded-2xl glass-panel select-none"
     >
       {/* Top-left subtle legend */}
-      <div className="absolute top-3.5 left-3.5 z-10 flex flex-wrap items-center gap-3 px-3.5 py-2 rounded-xl glass-subtle text-xs text-slate-300 pointer-events-none">
+      <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-wrap items-center gap-2 sm:gap-3 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl glass-subtle text-[11px] sm:text-xs text-slate-300 pointer-events-none">
         <span className="inline-flex items-center gap-1.5 font-medium text-emerald-300">
-          <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-amber-400 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
-          Hovedsti mot Homo sapiens
+          <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-amber-400 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
+          <span>Hovedsti</span>
         </span>
         <span className="text-slate-600">•</span>
         <span className="inline-flex items-center gap-1.5 text-slate-300">
           <span className="w-2 h-2 rounded-full bg-sky-400" />
-          Sidegrener (klikk for å utforske)
+          <span>Sidegrener (trykk på node)</span>
         </span>
       </div>
 
       {/* Camera controls floating bottom-left */}
-      <div className="absolute bottom-3.5 left-3.5 z-10 flex items-center gap-1.5 p-1.5 rounded-xl glass-subtle">
+      <div className="absolute bottom-2.5 left-2.5 sm:bottom-3.5 sm:left-3.5 z-10 flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-xl glass-subtle">
         <button
           id="btn-zoom-in"
           type="button"
@@ -359,7 +359,7 @@ export function PhylogeneticTree({
             setCamera((prev) => ({ ...prev, scale: Math.min(2.2, prev.scale * 1.2) }));
           }}
           title="Zoom inn"
-          className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
+          className="p-1.5 sm:p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -371,7 +371,7 @@ export function PhylogeneticTree({
             setCamera((prev) => ({ ...prev, scale: Math.max(0.32, prev.scale / 1.2) }));
           }}
           title="Zoom ut"
-          className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
+          className="p-1.5 sm:p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
         >
           <Minus className="w-4 h-4" />
         </button>
@@ -383,7 +383,7 @@ export function PhylogeneticTree({
             setCameraMode('follow');
             setCamera(computeFollowCamera(selectedNodeId));
           }}
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+          className={`inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
             cameraMode === 'follow'
               ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/35'
               : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
@@ -391,7 +391,7 @@ export function PhylogeneticTree({
           title="Sentrer kamera på aktivt steg"
         >
           <Focus className="w-3.5 h-3.5" />
-          <span>Følg steg</span>
+          <span>Følg</span>
         </button>
         <button
           id="btn-camera-overview"
@@ -400,7 +400,7 @@ export function PhylogeneticTree({
             setCameraMode('overview');
             setCamera(computeOverviewCamera());
           }}
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+          className={`inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
             cameraMode === 'overview'
               ? 'bg-amber-500/20 text-amber-300 border border-amber-500/35'
               : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
@@ -419,7 +419,7 @@ export function PhylogeneticTree({
       </div>
 
       <svg
-        className={`w-full h-full ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`w-full h-full touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}

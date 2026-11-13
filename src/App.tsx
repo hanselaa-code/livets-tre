@@ -27,6 +27,9 @@ export function App() {
     setCurrentStepIndex(clamped);
     setUnlockedStepIndex((prev) => Math.max(prev, clamped));
     setSelectedNodeId(MAIN_STEP_IDS[clamped]);
+    if (window.innerWidth < 1024) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, []);
 
   const handleNext = useCallback(() => {
@@ -187,10 +190,10 @@ export function App() {
       )}
 
       {/* Main split classroom stage: Left/Top Interactive Tree + Right Info Card */}
-      <main className="flex-1 min-h-0 p-3 sm:p-4 lg:px-6 lg:py-4 grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-[1920px] w-full mx-auto">
+      <main className="flex-1 min-h-0 p-3 pb-24 sm:p-4 sm:pb-24 lg:px-6 lg:py-4 lg:pb-4 grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 max-w-[1920px] w-full mx-auto">
         <section
           aria-label="Interaktivt stamtre"
-          className="h-[46vh] sm:h-[52vh] lg:h-full lg:col-span-7 xl:col-span-7 min-h-[340px]"
+          className="h-[39vh] min-h-[265px] sm:h-[48vh] lg:h-full lg:col-span-7 xl:col-span-7"
         >
           <PhylogeneticTree
             unlockedStepIndex={unlockedStepIndex}
