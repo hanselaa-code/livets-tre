@@ -5,6 +5,7 @@ import {
   Keyboard,
   Maximize,
   Minimize,
+  QrCode,
   RotateCcw,
   TreePine,
 } from 'lucide-react';
@@ -17,6 +18,7 @@ interface TopBarProps {
   isFullscreen: boolean;
   onToggleShowAll: () => void;
   onToggleQuiz: () => void;
+  onOpenQrModal: () => void;
   onToggleFullscreen: () => void;
   onResetPresentation: () => void;
 }
@@ -28,6 +30,7 @@ export function TopBar({
   isFullscreen,
   onToggleShowAll,
   onToggleQuiz,
+  onOpenQrModal,
   onToggleFullscreen,
   onResetPresentation,
 }: TopBarProps) {
@@ -42,10 +45,10 @@ export function TopBar({
         </div>
         <div className="min-w-0">
           <h1 className="text-sm sm:text-lg lg:text-xl font-extrabold text-white truncate font-display">
-            Livets Tre <span className="hidden xs:inline">– Fra LUCA til </span>
-            <span className="italic font-semibold text-amber-300 hidden xs:inline">Homo sapiens</span>
+            Livets Tre <span className="hidden sm:inline">– Fra LUCA til </span>
+            <span className="italic font-semibold text-amber-300 hidden sm:inline">Homo sapiens</span>
           </h1>
-          <p className="text-xs text-slate-400 hidden sm:block">
+          <p className="text-xs text-slate-400 hidden md:block">
             Interaktiv klasseromspresentasjon • 3,7 milliarder års evolusjon (Vg1 Naturfag / Biologi)
           </p>
         </div>
@@ -53,12 +56,24 @@ export function TopBar({
 
       {/* Right toolbar controls */}
       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-medium text-slate-300">
-          <span>Progresjon:</span>
+        <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-medium text-slate-300">
+          <span>Steg:</span>
           <span className="font-mono-time font-bold text-emerald-300">
             {currentStepIndex + 1} / 10
           </span>
         </div>
+
+        {/* QR Code button for sharing with students on mobile */}
+        <button
+          id="btn-open-qr"
+          type="button"
+          onClick={onOpenQrModal}
+          title="Vis QR-kode for deling med elever (K)"
+          className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-200 text-xs font-bold transition-all cursor-pointer"
+        >
+          <QrCode className="w-4 h-4 text-emerald-300" />
+          <span>QR-kode</span>
+        </button>
 
         {/* Toggle progressive reveal vs full tree */}
         <button
@@ -73,7 +88,7 @@ export function TopBar({
           title="Veksle mellom stegvis fremføring og visning av hele stamtreet"
         >
           {showAllSteps ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-          <span className="hidden sm:inline">
+          <span className="hidden lg:inline">
             {showAllSteps ? 'Stegvis modus' : 'Vis hele treet'}
           </span>
         </button>
@@ -85,7 +100,7 @@ export function TopBar({
             type="button"
             onClick={onResetPresentation}
             title="Start fremføringen fra Steg 1 (LUCA)"
-            className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition-colors cursor-pointer"
+            className="hidden sm:inline-flex p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -142,6 +157,10 @@ export function TopBar({
                 <div className="flex items-center justify-between">
                   <span>Forrige steg</span>
                   <span className="font-mono-time text-emerald-300">← / ↑</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Vis QR-kode for elever</span>
+                  <span className="font-mono-time text-emerald-300">K</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Fullskjerm av/på</span>

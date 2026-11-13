@@ -291,7 +291,7 @@ export function PhylogeneticTree({
     setCameraMode('manual');
     setCamera((prev) => ({
       ...prev,
-      scale: Math.max(0.32, Math.min(2.2, prev.scale * factor)),
+      scale: Math.max(0.20, Math.min(2.2, prev.scale * factor)),
     }));
   };
 
@@ -368,7 +368,7 @@ export function PhylogeneticTree({
           type="button"
           onClick={() => {
             setCameraMode('manual');
-            setCamera((prev) => ({ ...prev, scale: Math.max(0.32, prev.scale / 1.2) }));
+            setCamera((prev) => ({ ...prev, scale: Math.max(0.20, prev.scale / 1.2) }));
           }}
           title="Zoom ut"
           className="p-1.5 sm:p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
@@ -429,7 +429,7 @@ export function PhylogeneticTree({
         aria-label="Interaktivt evolusjonært stamtre fra LUCA (3700 ma) til Homo sapiens"
       >
         <defs>
-          <linearGradient id="mainTrunkGradient" x1="250" y1="1140" x2="1845" y2="85" gradientUnits="userSpaceOnUse">
+          <linearGradient id="mainTrunkGradient" x1="280" y1="1560" x2="2385" y2="95" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#10B981" />
             <stop offset="58%" stopColor="#34D399" />
             <stop offset="100%" stopColor="#F59E0B" />
@@ -463,24 +463,24 @@ export function PhylogeneticTree({
         >
           {/* Subtle geological horizon arcs in deep background */}
           {[
-            { y: 1140, label: 'URHAVET • 3700 ma' },
-            { y: 980, label: 'PROTEROZOIKUM • 2000 ma' },
-            { y: 705, label: 'PALEOZOIKUM • 540–375 ma' },
-            { y: 455, label: 'MESOZOIKUM • 252–66 ma' },
-            { y: 155, label: 'KENOZOIKUM • 66 ma – NÅTID' },
+            { y: 1560, label: 'URHAVET • 3700 ma' },
+            { y: 1380, label: 'PROTEROZOIKUM • 2000 ma' },
+            { y: 1005, label: 'PALEOZOIKUM • 540–375 ma' },
+            { y: 665, label: 'MESOZOIKUM • 252–66 ma' },
+            { y: 220, label: 'KENOZOIKUM • 66 ma – NÅTID' },
           ].map((band) => (
             <g key={band.label} opacity={0.22} className="pointer-events-none">
               <line
-                x1={60}
+                x1={50}
                 y1={band.y}
-                x2={1960}
+                x2={2580}
                 y2={band.y}
                 stroke="rgba(148, 163, 184, 0.22)"
                 strokeWidth={1}
                 strokeDasharray="6 10"
               />
               <text
-                x={75}
+                x={65}
                 y={band.y - 8}
                 fill="#94A3B8"
                 fontSize={11}

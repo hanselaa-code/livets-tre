@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
 import { PhylogeneticTree } from './components/PhylogeneticTree';
+import { QrShareModal } from './components/QrShareModal';
 import { QuizModal } from './components/QuizModal';
 import { TimelineDock } from './components/TimelineDock';
 import { TopBar } from './components/TopBar';
@@ -14,6 +15,7 @@ export function App() {
   const [selectedNodeId, setSelectedNodeId] = useState<string>(MAIN_STEP_IDS[0]);
   const [showAllSteps, setShowAllSteps] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isQrOpen, setIsQrOpen] = useState(false);
   const [lightboxNode, setLightboxNode] = useState<TreeNodeData | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isCinemaFallback, setIsCinemaFallback] = useState(false);
@@ -33,16 +35,20 @@ export function App() {
   }, []);
 
   const handleNext = useCallback(() => {
-    if (isQuizOpen) return;
+    if (isQuizOpen || isQrOpen) return;
 
     if (currentStepIndex < MAIN_STEP_IDS.length - 1) {
       jumpToStep(currentStepIndex + 1);
     } else {
       setIsQuizOpen(true);
     }
-  }, [currentStepIndex, isQuizOpen, jumpToStep]);
+  }, [currentStepIndex, isQrOpen, isQuizOpen, jumpToStep]);
 
   const handlePrev = useCallback(() => {
+    if (isQrOpen) {
+      setIsQrOpen(false);
+      return;
+    }
     if (isQuizOpen) {
       setIsQuizOpen(false);
       return;
@@ -50,7 +56,7 @@ export function App() {
     if (currentStepIndex > 0) {
       jumpToStep(currentStepIndex - 1);
     }
-  }, [currentStepIndex, isQuizOpen, jumpToStep]);
+  }, [currentStepIndex, isQrOpen, isQuizOpen, jumpToStep]);
 
   const handleSelectNode = useCallback((nodeId: string) => {
     const target = NODE_MAP[nodeId];
@@ -64,6 +70,7 @@ export function App() {
 
   const handleResetPresentation = useCallback(() => {
     setIsQuizOpen(false);
+    setIsQrOpen(false);
     setShowAllSteps(false);
     setCurrentStepIndex(0);
     setUnlockedStepIndex(0);
@@ -83,7 +90,6 @@ export function App() {
         await document.exitFullscreen();
       }
     } catch {
-      // In sandboxed preview iframes, toggle distraction-free cinema layout
       setIsCinemaFallback((prev) => {
         const next = !prev;
         setIsFullscreen(next);
@@ -118,6 +124,10 @@ export function App() {
           setLightboxNode(null);
           return;
         }
+        if (isQrOpen) {
+          setIsQrOpen(false);
+          return;
+        }
         if (isQuizOpen) {
           setIsQuizOpen(false);
           return;
@@ -137,6 +147,14 @@ export function App() {
         }
       }
 
+      if (e.key === 'k' || e.key === 'K') {
+        if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+          e.preventDefault();
+          setIsQrOpen((prev) => !prev);
+          return;
+        }
+      }
+
       if (e.key === 'q' || e.key === 'Q') {
         if (!e.ctrlKey && !e.metaKey && !e.altKey) {
           e.preventDefault();
@@ -145,7 +163,7 @@ export function App() {
         }
       }
 
-      if (lightboxNode) return;
+      if (lightboxNode || isQrOpen) return;
 
       if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         if (!isQuizOpen) {
@@ -160,7 +178,7 @@ export function App() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [handleNext, handlePrev, isCinemaFallback, isQuizOpen, lightboxNode, toggleFullscreen]);
+  }, [handleNext, handlePrev, isCinemaFallback, isQrOpen, isQuizOpen, lightboxNode, toggleFullscreen]);
 
   const activeNode = NODE_MAP[selectedNodeId] ?? NODE_MAP[MAIN_STEP_IDS[0]];
 
@@ -174,6 +192,7 @@ export function App() {
           isFullscreen={isFullscreen}
           onToggleShowAll={() => setShowAllSteps((prev) => !prev)}
           onToggleQuiz={() => setIsQuizOpen((prev) => !prev)}
+          onOpenQrModal={() => setIsQrOpen(true)}
           onToggleFullscreen={() => void toggleFullscreen()}
           onResetPresentation={handleResetPresentation}
         />
@@ -231,6 +250,11 @@ export function App() {
           onJumpToStep={jumpToStep}
         />
       )}
+
+      <QrShareModal
+        isOpen={isQrOpen}
+        onClose={() => setIsQrOpen(false)}
+      />
 
       <ImageLightbox
         node={lightboxNode}
