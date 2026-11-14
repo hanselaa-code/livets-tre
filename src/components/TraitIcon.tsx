@@ -1,8 +1,11 @@
 import {
+  Activity,
+  Bone,
   Brain,
   Compass,
   Cpu,
   Dna,
+  Ear,
   Eye,
   Feather,
   Flame,
@@ -18,6 +21,7 @@ import {
   Users,
   Waves,
   Wind,
+  Zap,
   type LucideProps,
 } from 'lucide-react';
 import type { TraitIconName } from '../data/treeOfLifeData';
@@ -64,6 +68,14 @@ export function TraitIcon({ name, ...props }: TraitIconProps) {
       return <Sprout {...props} />;
     case 'shell':
       return <Shell {...props} />;
+    case 'bone':
+      return <Bone {...props} />;
+    case 'ear':
+      return <Ear {...props} />;
+    case 'zap':
+      return <Zap {...props} />;
+    case 'activity':
+      return <Activity {...props} />;
     case 'sparkles':
     default:
       return <Sparkles {...props} />;

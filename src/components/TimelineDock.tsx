@@ -1,8 +1,9 @@
 import { ArrowLeft, ArrowRight, ChevronUp, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
-import { MAIN_STEP_IDS, NODE_MAP } from '../data/treeOfLifeData';
+import type { ThemeConfig } from '../data/themes';
 
 interface TimelineDockProps {
+  activeTheme: ThemeConfig;
   currentStepIndex: number;
   unlockedStepIndex: number;
   showAllSteps: boolean;
@@ -12,6 +13,7 @@ interface TimelineDockProps {
 }
 
 export function TimelineDock({
+  activeTheme,
   currentStepIndex,
   unlockedStepIndex,
   showAllSteps,
@@ -21,17 +23,20 @@ export function TimelineDock({
 }: TimelineDockProps) {
   const [mobileStepMenuOpen, setMobileStepMenuOpen] = useState(false);
 
+  const mainStepIds = activeTheme.mainStepIds;
+  const nodeMap = activeTheme.nodeMap;
+
   const isFirstStep = currentStepIndex === 0;
-  const isLastStep = currentStepIndex === MAIN_STEP_IDS.length - 1;
-  const currentStepNode = NODE_MAP[MAIN_STEP_IDS[currentStepIndex]];
+  const isLastStep = currentStepIndex === mainStepIds.length - 1;
+  const currentStepNode = nodeMap[mainStepIds[currentStepIndex]];
 
   return (
     <footer className="fixed bottom-0 inset-x-0 lg:static z-30 border-t border-slate-700/80 lg:border-slate-800/85 bg-[#090E1A]/95 backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,0,0,0.65)] lg:shadow-none pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-2.5 px-3 sm:px-5 lg:py-3 lg:px-6">
       {/* Optional mobile quick-jump step drawer when tapping center step indicator */}
       {mobileStepMenuOpen && (
         <div className="md:hidden mb-2.5 p-2.5 rounded-2xl bg-slate-900/95 border border-slate-700/80 max-h-56 overflow-y-auto custom-scrollbar grid grid-cols-2 gap-1.5 animate-card-enter">
-          {MAIN_STEP_IDS.map((id, idx) => {
-            const stepNode = NODE_MAP[id];
+          {mainStepIds.map((id, idx) => {
+            const stepNode = nodeMap[id];
             const isCurrent = idx === currentStepIndex;
             return (
               <button
@@ -86,13 +91,13 @@ export function TimelineDock({
           <span className="hidden xs:inline sm:inline">Forrige</span>
         </button>
 
-        {/* Desktop interactive 10-step geological timeline */}
+        {/* Desktop interactive 10-step bar */}
         <nav
-          aria-label="Evolusjonære hovedsteg"
+          aria-label={activeTheme.title}
           className="hidden md:flex items-center gap-1 lg:gap-1.5 flex-1 justify-center overflow-x-auto py-0.5"
         >
-          {MAIN_STEP_IDS.map((id, idx) => {
-            const stepNode = NODE_MAP[id];
+          {mainStepIds.map((id, idx) => {
+            const stepNode = nodeMap[id];
             const isCurrent = idx === currentStepIndex;
             const isUnlocked = showAllSteps || idx <= unlockedStepIndex;
 
@@ -102,7 +107,7 @@ export function TimelineDock({
                 id={`timeline-step-${idx + 1}`}
                 type="button"
                 onClick={() => onJumpToStep(idx)}
-                title={`Steg ${idx + 1}: ${stepNode.title} (${stepNode.timeMa})`}
+                title={`${activeTheme.stepWord} ${idx + 1}: ${stepNode.title} (${stepNode.timeMa})`}
                 className={`group flex flex-col items-center px-2 lg:px-2.5 py-1 rounded-xl border transition-all cursor-pointer ${
                   isCurrent
                     ? 'bg-emerald-500/20 border-emerald-400/50 text-white shadow-[0_0_15px_rgba(16,185,129,0.2)]'
@@ -123,8 +128,8 @@ export function TimelineDock({
                   >
                     {idx + 1}
                   </span>
-                  <span className="text-[11px] font-semibold hidden xl:inline max-w-[92px] truncate">
-                    {stepNode.title.split(' ')[0].replace('–', '')}
+                  <span className="text-[11px] font-semibold hidden xl:inline max-w-[96px] truncate">
+                    {stepNode.shortLabel.split(' ')[0]}
                   </span>
                 </div>
                 <span
@@ -148,7 +153,7 @@ export function TimelineDock({
         >
           <span className="inline-flex items-center gap-1 font-bold text-white text-xs whitespace-nowrap">
             <span>
-              Steg {currentStepIndex + 1}/{MAIN_STEP_IDS.length}
+              {activeTheme.stepWord} {currentStepIndex + 1}/{mainStepIds.length}
             </span>
             <ChevronUp
               className={`w-3.5 h-3.5 text-emerald-300 transition-transform ${
@@ -157,7 +162,7 @@ export function TimelineDock({
             />
           </span>
           <span className="text-[10px] font-mono-time text-amber-300 truncate max-w-[96px]">
-            {currentStepNode.timeMa}
+            {currentStepNode?.shortLabel}
           </span>
         </button>
 

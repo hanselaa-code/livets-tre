@@ -17,7 +17,11 @@ export type TraitIconName =
   | 'waves'
   | 'feather'
   | 'sprout'
-  | 'shell';
+  | 'shell'
+  | 'bone'
+  | 'ear'
+  | 'zap'
+  | 'activity';
 
 export interface KeyTrait {
   title: string;
@@ -52,6 +56,10 @@ export interface TreeNodeData {
   whatHappens: string;
   keyTraits: KeyTrait[];
   didYouKnow: string;
+  /** Optional quick classroom experiment students can test on their own body */
+  classroomTest?: string;
+  /** Optional evolutionary trace category label (e.g. Rudimentært spor, Kompromiss) */
+  traceBadge?: string;
   examples: string[];
   accentCategory: 'origin' | 'microbe' | 'plant_fungi' | 'invertebrate' | 'vertebrate' | 'mammal' | 'human';
 }
@@ -73,7 +81,7 @@ export interface ControlQuestionItem {
   takeaway: string;
 }
 
-const evoImg = (file: string): string =>
+export const evoImg = (file: string): string =>
   (globalThis as unknown as { __EVO_IMGS__?: Record<string, string> }).__EVO_IMGS__?.[file] ??
   `./images/evolution/${file}`;
 

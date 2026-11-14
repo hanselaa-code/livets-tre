@@ -9,18 +9,24 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useState } from 'react';
-import { CONTROL_QUESTIONS } from '../data/treeOfLifeData';
+import type { ThemeConfig } from '../data/themes';
 
 interface QuizModalProps {
+  activeTheme: ThemeConfig;
   onClose: () => void;
   onJumpToStep: (stepIndex: number) => void;
 }
 
-export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
-  // Track which question cards have their answers revealed
+export function QuizModal({
+  activeTheme,
+  onClose,
+  onJumpToStep,
+}: QuizModalProps) {
+  const questions = activeTheme.controlQuestions;
   const [revealedCards, setRevealedCards] = useState<Record<string, boolean>>({});
-  // Also allow revealing individual points inside a card one-by-one!
-  const [revealedPoints, setRevealedPoints] = useState<Record<string, boolean>>({});
+  const [revealedPoints, setRevealedPoints] = useState<Record<string, boolean>>(
+    {},
+  );
 
   const toggleCard = (cardId: string, pointCount: number) => {
     const nextState = !revealedCards[cardId];
@@ -32,7 +38,11 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
     setRevealedPoints(updatedPoints);
   };
 
-  const toggleSinglePoint = (cardId: string, pointIdx: number, totalPoints: number) => {
+  const toggleSinglePoint = (
+    cardId: string,
+    pointIdx: number,
+    totalPoints: number,
+  ) => {
     const key = `${cardId}-${pointIdx}`;
     const nextVal = !revealedPoints[key];
     const nextPoints = { ...revealedPoints, [key]: nextVal };
@@ -47,7 +57,7 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
   const revealAll = () => {
     const allCards: Record<string, boolean> = {};
     const allPts: Record<string, boolean> = {};
-    for (const q of CONTROL_QUESTIONS) {
+    for (const q of questions) {
       allCards[q.id] = true;
       q.points.forEach((_, idx) => {
         allPts[`${q.id}-${idx}`] = true;
@@ -77,7 +87,7 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-sm font-bold text-slate-100 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Tilbake til Livets Tre</span>
+            <span>{activeTheme.backFromQuizLabel}</span>
           </button>
 
           <div className="flex items-center gap-2">
@@ -109,7 +119,7 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
             <span>Klasseromsdiskusjon & Oppsummering</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white font-display">
-            Kontrollspørsmål: Livets utvikling
+            {activeTheme.quizTitle}
           </h2>
           <p className="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
             Diskuter spørsmålene sammen to og to eller i plenum før dere klikker frem delsvarene eller hele fasiten ett kort om gangen.
@@ -118,7 +128,7 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
 
         {/* Question Cards */}
         <div className="space-y-6">
-          {CONTROL_QUESTIONS.map((item) => {
+          {questions.map((item) => {
             const isCardRevealed = !!revealedCards[item.id];
 
             return (
@@ -130,7 +140,7 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div className="space-y-2">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/20 border border-amber-400/35 text-amber-300 text-xs font-bold font-mono-time">
-                      Spørsmål {item.number} av {CONTROL_QUESTIONS.length}
+                      Spørsmål {item.number} av {questions.length}
                     </span>
                     <h3 className="text-xl sm:text-2xl font-extrabold text-white leading-snug font-display">
                       {item.question}
@@ -173,7 +183,9 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
                       <button
                         key={pt.heading}
                         type="button"
-                        onClick={() => toggleSinglePoint(item.id, idx, item.points.length)}
+                        onClick={() =>
+                          toggleSinglePoint(item.id, idx, item.points.length)
+                        }
                         className={`w-full text-left p-4 rounded-xl border transition-all cursor-pointer ${
                           isPointOpen
                             ? 'bg-slate-900/90 border-emerald-500/40'
@@ -184,11 +196,15 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
                           <div className="flex items-center gap-2.5">
                             <CheckCircle2
                               className={`w-5 h-5 shrink-0 transition-colors ${
-                                isPointOpen ? 'text-emerald-400' : 'text-slate-600'
+                                isPointOpen
+                                  ? 'text-emerald-400'
+                                  : 'text-slate-600'
                               }`}
                             />
                             <span className="font-bold text-sm sm:text-base text-white">
-                              {isPointOpen ? pt.heading : `Klikk for å vise punkt ${idx + 1}`}
+                              {isPointOpen
+                                ? pt.heading
+                                : `Klikk for å vise punkt ${idx + 1}`}
                             </span>
                             {pt.badge && (
                               <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[11px] font-semibold">
@@ -211,7 +227,7 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
                   })}
                 </div>
 
-                {/* Optional comparison table (for Question 2: r- vs K-strategy) */}
+                {/* Optional comparison table */}
                 {isCardRevealed && item.comparisonTable && (
                   <div className="overflow-x-auto rounded-xl border border-slate-700/80 bg-slate-950/70 animate-card-enter">
                     <table className="w-full text-left text-xs sm:text-sm">
@@ -230,8 +246,12 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
                             <td className="px-4 py-2.5 font-semibold text-slate-300">
                               {row[0]}
                             </td>
-                            <td className="px-4 py-2.5 text-sky-200">{row[1]}</td>
-                            <td className="px-4 py-2.5 text-amber-200">{row[2]}</td>
+                            <td className="px-4 py-2.5 text-sky-200">
+                              {row[1]}
+                            </td>
+                            <td className="px-4 py-2.5 text-amber-200">
+                              {row[2]}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -243,7 +263,9 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
                 {isCardRevealed && (
                   <div className="flex items-start gap-2.5 p-4 rounded-xl bg-emerald-500/12 border border-emerald-400/30 text-sm text-emerald-100 animate-card-enter">
                     <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <p className="font-medium leading-relaxed">{item.takeaway}</p>
+                    <p className="font-medium leading-relaxed">
+                      {item.takeaway}
+                    </p>
                   </div>
                 )}
               </article>
@@ -251,19 +273,13 @@ export function QuizModal({ onClose, onJumpToStep }: QuizModalProps) {
           })}
         </div>
 
-        {/* Quick jump back to relevant steps in the tree */}
+        {/* Quick jump back to relevant steps */}
         <div className="p-5 rounded-2xl glass-subtle flex flex-wrap items-center justify-between gap-3">
           <span className="text-sm text-slate-300 font-medium">
-            Vil dere se nærmere på et av stegene i stamtreet igjen?
+            Vil dere hoppe rett tilbake til et bestemt steg?
           </span>
           <div className="flex flex-wrap gap-2">
-            {[
-              { label: 'Steg 3: Dyr (660 ma)', idx: 2 },
-              { label: 'Steg 4: Virveldyr (450 ma)', idx: 3 },
-              { label: 'Steg 6: Pattedyr (178 ma)', idx: 5 },
-              { label: 'Steg 7: Morkakedyr (161 ma)', idx: 6 },
-              { label: 'Steg 10: Homo sapiens', idx: 9 },
-            ].map((shortcut) => (
+            {activeTheme.quizShortcuts.map((shortcut) => (
               <button
                 key={shortcut.label}
                 type="button"

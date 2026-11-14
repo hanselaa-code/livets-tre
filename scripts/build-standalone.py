@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Bundles the Vite production build (dist/) and all 12 Nano Banana illustrations
+Bundles the Vite production build (dist/) and all Nano Banana illustrations
 into a single zero-dependency, CSP-safe HTML file that runs anywhere:
 - Inside Antigravity's built-in Artifact Preview pane
 - Directly from Google Drive / local disk (file://) without any web server
@@ -21,11 +21,18 @@ OUT_DIST_HTML = os.path.join(DIST, "Livets-Tre-Presentasjon.html")
 
 def encode_image_data_uri(png_path: str) -> str:
     with Image.open(png_path) as im:
-        rgb = im.convert("RGB")
-        if rgb.width > 1280:
-            rgb = rgb.resize((1280, 720), Image.Resampling.LANCZOS)
+        has_alpha = im.mode in ("RGBA", "LA")
+        converted = im.convert("RGBA" if has_alpha else "RGB")
+        max_dim = max(converted.width, converted.height)
+        if max_dim > 1280:
+            scale = 1280.0 / max_dim
+            new_size = (
+                max(1, round(converted.width * scale)),
+                max(1, round(converted.height * scale)),
+            )
+            converted = converted.resize(new_size, Image.Resampling.LANCZOS)
         buf = io.BytesIO()
-        rgb.save(buf, format="WEBP", quality=80, method=6)
+        converted.save(buf, format="WEBP", quality=78, method=6)
         b64 = base64.b64encode(buf.getvalue()).decode("ascii")
         return f"data:image/webp;base64,{b64}"
 
@@ -58,9 +65,9 @@ def main() -> None:
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,{favicon_b64}" />
     <meta
       name="description"
-      content="Livets Tre – Fra LUCA (3700 ma) til Homo sapiens. En interaktiv klasseromspresentasjon for Vg1 naturfag og biologi."
+      content="Livets Tre & Menneskekroppens evolusjonære spor – Interaktiv klasseromspresentasjon for Vg1 naturfag og biologi."
     />
-    <title>Livets Tre – Fra LUCA til Homo sapiens | Interaktiv Klasseromspresentasjon</title>
+    <title>Livets Tre & Menneskekroppens evolusjonære spor | Klasseromspresentasjon</title>
     <style>
 {css_content}
     </style>

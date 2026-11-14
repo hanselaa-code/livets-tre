@@ -1,5 +1,6 @@
 import { Minimize } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { HumanBodyExplorer } from './components/HumanBodyExplorer';
 import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
 import { PhylogeneticTree } from './components/PhylogeneticTree';
@@ -7,42 +8,137 @@ import { QrShareModal } from './components/QrShareModal';
 import { QuizModal } from './components/QuizModal';
 import { TimelineDock } from './components/TimelineDock';
 import { TopBar } from './components/TopBar';
-import { MAIN_STEP_IDS, NODE_MAP, type TreeNodeData } from './data/treeOfLifeData';
+import {
+  parseThemeFromHash,
+  THEMES,
+  type ThemeId,
+} from './data/themes';
+import type { TreeNodeData } from './data/treeOfLifeData';
+
+interface ThemeProgressState {
+  currentStepIndex: number;
+  unlockedStepIndex: number;
+  selectedNodeId: string;
+  showAllSteps: boolean;
+}
+
+function createInitialProgress(): Record<ThemeId, ThemeProgressState> {
+  return {
+    'livets-tre': {
+      currentStepIndex: 0,
+      unlockedStepIndex: 0,
+      selectedNodeId: THEMES['livets-tre'].mainStepIds[0],
+      showAllSteps: false,
+    },
+    'kroppens-evolusjon': {
+      currentStepIndex: 0,
+      unlockedStepIndex: 0,
+      selectedNodeId: THEMES['kroppens-evolusjon'].mainStepIds[0],
+      showAllSteps: false,
+    },
+  };
+}
 
 export function App() {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [unlockedStepIndex, setUnlockedStepIndex] = useState(0);
-  const [selectedNodeId, setSelectedNodeId] = useState<string>(MAIN_STEP_IDS[0]);
-  const [showAllSteps, setShowAllSteps] = useState(false);
+  const [activeThemeId, setActiveThemeId] = useState<ThemeId>(() =>
+    typeof window !== 'undefined'
+      ? parseThemeFromHash(window.location.hash)
+      : 'livets-tre',
+  );
+  const [progressByTheme, setProgressByTheme] = useState<
+    Record<ThemeId, ThemeProgressState>
+  >(createInitialProgress);
+
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isQrOpen, setIsQrOpen] = useState(false);
   const [lightboxNode, setLightboxNode] = useState<TreeNodeData | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isCinemaFallback, setIsCinemaFallback] = useState(false);
 
+  const activeTheme = THEMES[activeThemeId];
+  const progress = progressByTheme[activeThemeId];
+  const {
+    currentStepIndex,
+    unlockedStepIndex,
+    selectedNodeId,
+    showAllSteps,
+  } = progress;
+
   useEffect(() => {
     window.focus();
   }, []);
 
-  const jumpToStep = useCallback((nextIdx: number) => {
-    const clamped = Math.max(0, Math.min(MAIN_STEP_IDS.length - 1, nextIdx));
-    setCurrentStepIndex(clamped);
-    setUnlockedStepIndex((prev) => Math.max(prev, clamped));
-    setSelectedNodeId(MAIN_STEP_IDS[clamped]);
+  // Sync browser hash & document title with active theme
+  useEffect(() => {
+    document.title = `${activeTheme.title} | Interaktiv Klasseromspresentasjon`;
+  }, [activeTheme.title]);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      const nextTheme = parseThemeFromHash(window.location.hash);
+      setActiveThemeId(nextTheme);
+      setIsQuizOpen(false);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  const handleSelectTheme = useCallback((nextThemeId: ThemeId) => {
+    setActiveThemeId(nextThemeId);
+    setIsQuizOpen(false);
+    setLightboxNode(null);
+    const targetHash =
+      nextThemeId === 'livets-tre' ? '' : THEMES[nextThemeId].hash;
+    try {
+      const url = new URL(window.location.href);
+      url.hash = targetHash;
+      window.history.replaceState(null, '', url.toString());
+    } catch {
+      // Ignore in restricted iframe contexts
+    }
     if (window.innerWidth < 1024) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, []);
 
+  const jumpToStep = useCallback(
+    (nextIdx: number) => {
+      const mainIds = activeTheme.mainStepIds;
+      const clamped = Math.max(0, Math.min(mainIds.length - 1, nextIdx));
+      setProgressByTheme((prev) => {
+        const cur = prev[activeThemeId];
+        return {
+          ...prev,
+          [activeThemeId]: {
+            ...cur,
+            currentStepIndex: clamped,
+            unlockedStepIndex: Math.max(cur.unlockedStepIndex, clamped),
+            selectedNodeId: mainIds[clamped],
+          },
+        };
+      });
+      if (window.innerWidth < 1024) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    },
+    [activeTheme.mainStepIds, activeThemeId],
+  );
+
   const handleNext = useCallback(() => {
     if (isQuizOpen || isQrOpen) return;
 
-    if (currentStepIndex < MAIN_STEP_IDS.length - 1) {
+    if (currentStepIndex < activeTheme.mainStepIds.length - 1) {
       jumpToStep(currentStepIndex + 1);
     } else {
       setIsQuizOpen(true);
     }
-  }, [currentStepIndex, isQrOpen, isQuizOpen, jumpToStep]);
+  }, [
+    activeTheme.mainStepIds.length,
+    currentStepIndex,
+    isQrOpen,
+    isQuizOpen,
+    jumpToStep,
+  ]);
 
   const handlePrev = useCallback(() => {
     if (isQrOpen) {
@@ -58,24 +154,54 @@ export function App() {
     }
   }, [currentStepIndex, isQrOpen, isQuizOpen, jumpToStep]);
 
-  const handleSelectNode = useCallback((nodeId: string) => {
-    const target = NODE_MAP[nodeId];
-    if (!target) return;
-    setSelectedNodeId(nodeId);
-    if (target.isMainPath) {
-      setCurrentStepIndex(target.stepIndex);
-      setUnlockedStepIndex((prev) => Math.max(prev, target.stepIndex));
-    }
-  }, []);
+  const handleSelectNode = useCallback(
+    (nodeId: string) => {
+      const target = activeTheme.nodeMap[nodeId];
+      if (!target) return;
+      setProgressByTheme((prev) => {
+        const cur = prev[activeThemeId];
+        return {
+          ...prev,
+          [activeThemeId]: {
+            ...cur,
+            selectedNodeId: nodeId,
+            currentStepIndex: target.isMainPath
+              ? target.stepIndex
+              : cur.currentStepIndex,
+            unlockedStepIndex: Math.max(cur.unlockedStepIndex, target.stepIndex),
+          },
+        };
+      });
+    },
+    [activeTheme.nodeMap, activeThemeId],
+  );
+
+  const handleToggleShowAll = useCallback(() => {
+    setProgressByTheme((prev) => {
+      const cur = prev[activeThemeId];
+      return {
+        ...prev,
+        [activeThemeId]: {
+          ...cur,
+          showAllSteps: !cur.showAllSteps,
+        },
+      };
+    });
+  }, [activeThemeId]);
 
   const handleResetPresentation = useCallback(() => {
     setIsQuizOpen(false);
     setIsQrOpen(false);
-    setShowAllSteps(false);
-    setCurrentStepIndex(0);
-    setUnlockedStepIndex(0);
-    setSelectedNodeId(MAIN_STEP_IDS[0]);
-  }, []);
+    setProgressByTheme((prev) => ({
+      ...prev,
+      [activeThemeId]: {
+        currentStepIndex: 0,
+        unlockedStepIndex: 0,
+        selectedNodeId: activeTheme.mainStepIds[0],
+        showAllSteps: false,
+      },
+    }));
+  }, [activeTheme.mainStepIds, activeThemeId]);
 
   const toggleFullscreen = useCallback(async () => {
     if (isCinemaFallback) {
@@ -178,19 +304,31 @@ export function App() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [handleNext, handlePrev, isCinemaFallback, isQrOpen, isQuizOpen, lightboxNode, toggleFullscreen]);
+  }, [
+    handleNext,
+    handlePrev,
+    isCinemaFallback,
+    isQrOpen,
+    isQuizOpen,
+    lightboxNode,
+    toggleFullscreen,
+  ]);
 
-  const activeNode = NODE_MAP[selectedNodeId] ?? NODE_MAP[MAIN_STEP_IDS[0]];
+  const activeNode =
+    activeTheme.nodeMap[selectedNodeId] ??
+    activeTheme.nodeMap[activeTheme.mainStepIds[0]];
 
   return (
     <div className="min-h-screen lg:h-screen flex flex-col oceanic-canvas text-slate-100 overflow-x-hidden lg:overflow-hidden relative">
       {!isCinemaFallback ? (
         <TopBar
+          activeTheme={activeTheme}
           currentStepIndex={currentStepIndex}
           showAllSteps={showAllSteps}
           isQuizOpen={isQuizOpen}
           isFullscreen={isFullscreen}
-          onToggleShowAll={() => setShowAllSteps((prev) => !prev)}
+          onSelectTheme={handleSelectTheme}
+          onToggleShowAll={handleToggleShowAll}
           onToggleQuiz={() => setIsQuizOpen((prev) => !prev)}
           onOpenQrModal={() => setIsQrOpen(true)}
           onToggleFullscreen={() => void toggleFullscreen()}
@@ -208,34 +346,46 @@ export function App() {
         </button>
       )}
 
-      {/* Main split classroom stage: Left/Top Interactive Tree + Right Info Card */}
+      {/* Main split classroom stage: Left/Top Interactive Canvas + Right Info Card */}
       <main className="flex-1 min-h-0 p-3 pb-24 sm:p-4 sm:pb-24 lg:px-6 lg:py-4 lg:pb-4 grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 max-w-[1920px] w-full mx-auto">
         <section
-          aria-label="Interaktivt stamtre"
-          className="h-[39vh] min-h-[265px] sm:h-[48vh] lg:h-full lg:col-span-7 xl:col-span-7"
+          aria-label={activeTheme.title}
+          className="h-[42vh] min-h-[280px] sm:h-[50vh] lg:h-full lg:col-span-7 xl:col-span-7"
         >
-          <PhylogeneticTree
-            unlockedStepIndex={unlockedStepIndex}
-            showAllSteps={showAllSteps}
-            selectedNodeId={selectedNodeId}
-            onSelectNode={handleSelectNode}
-          />
+          {activeThemeId === 'livets-tre' ? (
+            <PhylogeneticTree
+              unlockedStepIndex={unlockedStepIndex}
+              showAllSteps={showAllSteps}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={handleSelectNode}
+            />
+          ) : (
+            <HumanBodyExplorer
+              unlockedStepIndex={unlockedStepIndex}
+              showAllSteps={showAllSteps}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={handleSelectNode}
+            />
+          )}
         </section>
 
         <section
-          aria-label="Fagkort for valgt evolusjonssteg"
+          aria-label="Fagkort for valgt tema"
           className="lg:h-full lg:col-span-5 xl:col-span-5 min-h-0"
         >
           <InfoPanel
+            activeTheme={activeTheme}
             node={activeNode}
             currentMainStepIndex={currentStepIndex}
             onSelectNode={handleSelectNode}
             onOpenLightbox={(node) => setLightboxNode(node)}
+            onSwitchTheme={handleSelectTheme}
           />
         </section>
       </main>
 
       <TimelineDock
+        activeTheme={activeTheme}
         currentStepIndex={currentStepIndex}
         unlockedStepIndex={unlockedStepIndex}
         showAllSteps={showAllSteps}
@@ -246,12 +396,15 @@ export function App() {
 
       {isQuizOpen && (
         <QuizModal
+          key={activeThemeId}
+          activeTheme={activeTheme}
           onClose={() => setIsQuizOpen(false)}
           onJumpToStep={jumpToStep}
         />
       )}
 
       <QrShareModal
+        activeTheme={activeTheme}
         isOpen={isQrOpen}
         onClose={() => setIsQrOpen(false)}
       />

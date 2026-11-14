@@ -1,23 +1,34 @@
 import { Check, Copy, QrCode, Smartphone, X } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
+import type { ThemeConfig } from '../data/themes';
 
 export const PUBLIC_CLASSROOM_URL = 'https://hanselaa-code.github.io/livets-tre/';
 
 interface QrShareModalProps {
+  activeTheme: ThemeConfig;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function QrShareModal({ isOpen, onClose }: QrShareModalProps) {
+export function QrShareModal({
+  activeTheme,
+  isOpen,
+  onClose,
+}: QrShareModalProps) {
   const [svgMarkup, setSvgMarkup] = useState<string>('');
   const [copied, setCopied] = useState(false);
+
+  const shareUrl =
+    activeTheme.id === 'livets-tre'
+      ? PUBLIC_CLASSROOM_URL
+      : `${PUBLIC_CLASSROOM_URL}${activeTheme.hash}`;
 
   useEffect(() => {
     if (!isOpen) return;
     let active = true;
 
-    QRCode.toString(PUBLIC_CLASSROOM_URL, {
+    QRCode.toString(shareUrl, {
       type: 'svg',
       margin: 2,
       errorCorrectionLevel: 'M',
@@ -36,13 +47,13 @@ export function QrShareModal({ isOpen, onClose }: QrShareModalProps) {
     return () => {
       active = false;
     };
-  }, [isOpen]);
+  }, [isOpen, shareUrl]);
 
   if (!isOpen) return null;
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(PUBLIC_CLASSROOM_URL);
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     } catch {
@@ -73,14 +84,16 @@ export function QrShareModal({ isOpen, onClose }: QrShareModalProps) {
         <div className="space-y-1.5">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/35 text-emerald-300 text-xs font-bold uppercase tracking-wider">
             <QrCode className="w-3.5 h-3.5" />
-            <span>Del med klassen</span>
+            <span>Del tema: {activeTheme.dropdownTitle}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
             Skann for å åpne på mobil
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 flex items-center justify-center gap-1.5">
             <Smartphone className="w-4 h-4 text-amber-300 shrink-0" />
-            <span>Rett mobilkameraet mot QR-koden på skjermen</span>
+            <span>
+              Åpner direkte i «{activeTheme.dropdownTitle}» på elevenes telefon
+            </span>
           </p>
         </div>
 
@@ -92,14 +105,16 @@ export function QrShareModal({ isOpen, onClose }: QrShareModalProps) {
               dangerouslySetInnerHTML={{ __html: svgMarkup }}
             />
           ) : (
-            <span className="text-slate-600 text-sm font-medium">Genererer QR-kode…</span>
+            <span className="text-slate-600 text-sm font-medium">
+              Genererer QR-kode…
+            </span>
           )}
         </div>
 
         {/* Direct URL + Copy Button */}
         <div className="space-y-2.5">
           <div className="px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-slate-800 font-mono-time text-xs sm:text-sm text-emerald-300 select-all break-all">
-            {PUBLIC_CLASSROOM_URL}
+            {shareUrl}
           </div>
 
           <div className="flex items-center justify-center gap-2.5">
