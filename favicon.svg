@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="16" fill="#0B1120"/>
+  <path d="M32 54V32" stroke="url(#trunk)" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M32 38C25 36 18 31 16 22" stroke="#10B981" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M32 32C32 23 39 17 47 13" stroke="#F59E0B" stroke-width="4" stroke-linecap="round"/>
+  <path d="M32 28C28 21 24 16 22 11" stroke="#34D399" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="32" cy="54" r="4.5" fill="#10B981"/>
+  <circle cx="16" cy="22" r="4" fill="#34D399"/>
+  <circle cx="22" cy="11" r="3.5" fill="#34D399"/>
+  <circle cx="47" cy="13" r="5" fill="#F59E0B"/>
+  <defs>
+    <linearGradient id="trunk" x1="32" y1="54" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+</svg>
