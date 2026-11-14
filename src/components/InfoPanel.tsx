@@ -6,6 +6,7 @@ import {
   GitBranch,
   Lightbulb,
   Maximize2,
+  Microscope,
   PersonStanding,
   Sparkles,
   Tag,
@@ -43,7 +44,7 @@ export function InfoPanel({
     return candidate.parentId === node.id || candidate.id === node.parentId;
   });
 
-  const isBodyTheme = activeTheme.id === 'kroppens-evolusjon';
+  const isTreeTheme = activeTheme.id === 'livets-tre';
 
   return (
     <aside
@@ -79,7 +80,7 @@ export function InfoPanel({
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/20 border border-emerald-400/35 text-emerald-300 text-xs font-bold tracking-wide uppercase">
                 {activeTheme.stepWord} {node.stepNumber} av{' '}
                 {activeTheme.mainStepIds.length}
-                {!isBodyTheme ? ' • Hovedsti' : ''}
+                {isTreeTheme ? ' • Hovedsti' : ''}
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-500/20 border border-sky-400/35 text-sky-200 text-xs font-bold tracking-wide uppercase">
@@ -138,13 +139,12 @@ export function InfoPanel({
           </figcaption>
         </figure>
 
-        {/* Hva skjer her? / Evolusjonær forklaring */}
+        {/* Main pedagogical summary */}
         <section className="space-y-2">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-300">
             <Sparkles className="w-4 h-4 text-emerald-400" />
             <h3>
-              {isBodyTheme ? 'Hvorfor har vi dette?' : 'Hva skjer her?'} —{' '}
-              {node.summaryTitle}
+              {activeTheme.summaryHeadingPrefix} — {node.summaryTitle}
             </h3>
           </div>
           <p className="text-[15px] lg:text-base text-slate-200 leading-relaxed">
@@ -152,12 +152,12 @@ export function InfoPanel({
           </p>
         </section>
 
-        {/* Optional hands-on classroom test (for Menneskekroppens evolusjonære spor) */}
+        {/* Optional hands-on classroom test / memory hook */}
         {node.classroomTest && (
           <section className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/15 via-teal-500/10 to-transparent border border-emerald-400/35 space-y-1.5">
             <div className="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider">
               <FlaskConical className="w-4 h-4 text-emerald-400 shrink-0" />
-              <h3>Prøv selv i klasserommet!</h3>
+              <h3>{activeTheme.classroomBoxHeading}</h3>
             </div>
             <p className="text-sm text-emerald-50/95 leading-relaxed">
               {node.classroomTest}
@@ -165,12 +165,10 @@ export function InfoPanel({
           </section>
         )}
 
-        {/* Evolusjonære nøkkeltrekk */}
+        {/* Key biological traits / mechanisms */}
         <section className="space-y-2.5">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-            {isBodyTheme
-              ? 'Evolusjonære mekanismer og spor'
-              : 'Evolusjonære nøkkeltrekk'}
+            {activeTheme.traitsHeading}
           </h3>
           <div className="grid grid-cols-1 gap-2.5">
             {node.keyTraits.map((trait) => (
@@ -249,6 +247,32 @@ export function InfoPanel({
           </p>
         </section>
 
+        {/* Bridge button from Eukaryoter / Dyr in Livets Tre directly to Eukaryot dyrecelle */}
+        {(node.id === 'eukaryotes' || node.id === 'animals') &&
+          activeTheme.id === 'livets-tre' && (
+            <button
+              id="btn-bridge-to-animal-cell"
+              type="button"
+              onClick={() => onSwitchTheme('dyrecellen')}
+              className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-teal-500/20 via-sky-500/15 to-emerald-500/15 hover:from-teal-500/30 hover:to-emerald-500/25 border border-teal-400/45 text-left transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-teal-400/20 border border-teal-300/40 flex items-center justify-center shrink-0">
+                  <Microscope className="w-5 h-5 text-teal-300" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-teal-300">
+                    Dypdykk i mikroskopet
+                  </div>
+                  <div className="text-sm font-extrabold text-white font-display">
+                    Utforsk temaet «Eukaryot dyrecelle» og alle organellene
+                  </div>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-teal-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+
         {/* Bridge button from Homo sapiens in Livets Tre directly to Menneskekroppens evolusjonære spor */}
         {node.id === 'homo_sapiens' && activeTheme.id === 'livets-tre' && (
           <button
@@ -274,7 +298,7 @@ export function InfoPanel({
           </button>
         )}
 
-        {/* Eksempler på arter / grupper / paralleller */}
+        {/* Eksempler / nøkkelbegreper */}
         <section className="space-y-2 pb-1">
           <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
             <Tag className="w-3.5 h-3.5" />

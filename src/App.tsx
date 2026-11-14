@@ -1,5 +1,6 @@
 import { Minimize } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { AnimalCellExplorer } from './components/AnimalCellExplorer';
 import { HumanBodyExplorer } from './components/HumanBodyExplorer';
 import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
@@ -10,6 +11,7 @@ import { TimelineDock } from './components/TimelineDock';
 import { TopBar } from './components/TopBar';
 import {
   parseThemeFromHash,
+  THEME_LIST,
   THEMES,
   type ThemeId,
 } from './data/themes';
@@ -23,20 +25,17 @@ interface ThemeProgressState {
 }
 
 function createInitialProgress(): Record<ThemeId, ThemeProgressState> {
-  return {
-    'livets-tre': {
-      currentStepIndex: 0,
-      unlockedStepIndex: 0,
-      selectedNodeId: THEMES['livets-tre'].mainStepIds[0],
-      showAllSteps: false,
-    },
-    'kroppens-evolusjon': {
-      currentStepIndex: 0,
-      unlockedStepIndex: 0,
-      selectedNodeId: THEMES['kroppens-evolusjon'].mainStepIds[0],
-      showAllSteps: false,
-    },
-  };
+  return Object.fromEntries(
+    THEME_LIST.map((t) => [
+      t.id,
+      {
+        currentStepIndex: 0,
+        unlockedStepIndex: 0,
+        selectedNodeId: t.mainStepIds[0],
+        showAllSteps: false,
+      },
+    ]),
+  ) as Record<ThemeId, ThemeProgressState>;
 }
 
 export function App() {
@@ -352,15 +351,24 @@ export function App() {
           aria-label={activeTheme.title}
           className="h-[42vh] min-h-[280px] sm:h-[50vh] lg:h-full lg:col-span-7 xl:col-span-7"
         >
-          {activeThemeId === 'livets-tre' ? (
+          {activeThemeId === 'livets-tre' && (
             <PhylogeneticTree
               unlockedStepIndex={unlockedStepIndex}
               showAllSteps={showAllSteps}
               selectedNodeId={selectedNodeId}
               onSelectNode={handleSelectNode}
             />
-          ) : (
+          )}
+          {activeThemeId === 'kroppens-evolusjon' && (
             <HumanBodyExplorer
+              unlockedStepIndex={unlockedStepIndex}
+              showAllSteps={showAllSteps}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={handleSelectNode}
+            />
+          )}
+          {activeThemeId === 'dyrecellen' && (
+            <AnimalCellExplorer
               unlockedStepIndex={unlockedStepIndex}
               showAllSteps={showAllSteps}
               selectedNodeId={selectedNodeId}

@@ -1,4 +1,10 @@
 import {
+  CELL_CONTROL_QUESTIONS,
+  CELL_MAIN_STEP_IDS,
+  CELL_NODE_MAP,
+  CELL_NODES,
+} from './animalCellData';
+import {
   BODY_CONTROL_QUESTIONS,
   BODY_MAIN_STEP_IDS,
   BODY_NODE_MAP,
@@ -13,7 +19,7 @@ import {
   type TreeNodeData,
 } from './treeOfLifeData';
 
-export type ThemeId = 'livets-tre' | 'kroppens-evolusjon';
+export type ThemeId = 'livets-tre' | 'kroppens-evolusjon' | 'dyrecellen';
 
 export interface ThemeConfig {
   id: ThemeId;
@@ -28,6 +34,9 @@ export interface ThemeConfig {
   progressiveLabel: string;
   quizTitle: string;
   backFromQuizLabel: string;
+  summaryHeadingPrefix: string;
+  traitsHeading: string;
+  classroomBoxHeading: string;
   examplesHeading: string;
   mainStepIds: string[];
   allNodes: TreeNodeData[];
@@ -52,16 +61,19 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
     progressiveLabel: 'Stegvis modus',
     quizTitle: 'Kontrollspørsmål: Livets utvikling',
     backFromQuizLabel: 'Tilbake til Livets Tre',
+    summaryHeadingPrefix: 'Hva skjer her?',
+    traitsHeading: 'Evolusjonære nøkkeltrekk',
+    classroomBoxHeading: 'Prøv selv i klasserommet!',
     examplesHeading: 'Eksempler på arter og grupper',
     mainStepIds: MAIN_STEP_IDS,
     allNodes: TREE_NODES,
     nodeMap: NODE_MAP,
     controlQuestions: CONTROL_QUESTIONS,
     quizShortcuts: [
+      { label: 'Steg 2: Eukaryoter (2000 ma)', idx: 1 },
       { label: 'Steg 3: Dyr (660 ma)', idx: 2 },
       { label: 'Steg 4: Virveldyr (450 ma)', idx: 3 },
       { label: 'Steg 6: Pattedyr (178 ma)', idx: 5 },
-      { label: 'Steg 7: Morkakedyr (161 ma)', idx: 6 },
       { label: 'Steg 10: Homo sapiens', idx: 9 },
     ],
   },
@@ -80,6 +92,9 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
     progressiveLabel: 'Stegvis modus',
     quizTitle: 'Kontrollspørsmål: Menneskekroppens evolusjonære spor',
     backFromQuizLabel: 'Tilbake til menneskekroppen',
+    summaryHeadingPrefix: 'Hvorfor har vi dette?',
+    traitsHeading: 'Evolusjonære mekanismer og spor',
+    classroomBoxHeading: 'Prøv selv i klasserommet!',
     examplesHeading: 'Eksempler og evolusjonære paralleller',
     mainStepIds: BODY_MAIN_STEP_IDS,
     allNodes: BODY_NODES,
@@ -94,17 +109,57 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
       { label: 'Spor 10: Fotbuen & nåtid', idx: 9 },
     ],
   },
+  dyrecellen: {
+    id: 'dyrecellen',
+    hash: '#dyrecellen',
+    title: 'Eukaryot dyrecelle – Oppbygning og organeller',
+    dropdownTitle: 'Eukaryot dyrecelle',
+    dropdownBadge: 'Cellemodell • Cellemembran & organeller',
+    dropdownDescription:
+      '3D-snitt av en dyrecelle i midten – fra cellemembranen inn til cellekjerne, ribosomer, ER, Golgi og mitokondrier.',
+    subtitle:
+      'Interaktiv cellemodell • Fra cellemembranen gjennom alle organellene og deres funksjon',
+    stepWord: 'Del',
+    showAllLabel: 'Vis alle organeller',
+    progressiveLabel: 'Stegvis modus',
+    quizTitle: 'Kontrollspørsmål: Eukaryot dyrecelle',
+    backFromQuizLabel: 'Tilbake til dyrecellen',
+    summaryHeadingPrefix: 'Oppgave i cellen',
+    traitsHeading: 'Oppbygning og nøkkelfunksjoner',
+    classroomBoxHeading: 'Husketriks & kobling i timen',
+    examplesHeading: 'Nøkkelbegreper å kunne',
+    mainStepIds: CELL_MAIN_STEP_IDS,
+    allNodes: CELL_NODES,
+    nodeMap: CELL_NODE_MAP,
+    controlQuestions: CELL_CONTROL_QUESTIONS,
+    quizShortcuts: [
+      { label: 'Del 1: Cellemembranen', idx: 0 },
+      { label: 'Del 3: Cellekjernen (DNA)', idx: 2 },
+      { label: 'Del 4: Ribosomer', idx: 3 },
+      { label: 'Del 5: Ru & glatt ER', idx: 4 },
+      { label: 'Del 6: Golgiapparatet', idx: 5 },
+      { label: 'Del 8: Mitokondrier (ATP)', idx: 7 },
+    ],
+  },
 };
 
 export const THEME_LIST: ThemeConfig[] = [
   THEMES['livets-tre'],
   THEMES['kroppens-evolusjon'],
+  THEMES.dyrecellen,
 ];
 
 export function parseThemeFromHash(hash: string): ThemeId {
   const clean = hash.replace(/^#/, '').trim().toLowerCase();
   if (clean === 'kroppens-evolusjon' || clean === 'kroppen') {
     return 'kroppens-evolusjon';
+  }
+  if (
+    clean === 'dyrecellen' ||
+    clean === 'dyrecelle' ||
+    clean === 'eukaryot-dyrecelle'
+  ) {
+    return 'dyrecellen';
   }
   return 'livets-tre';
 }

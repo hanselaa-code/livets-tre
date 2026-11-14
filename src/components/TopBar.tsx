@@ -6,6 +6,7 @@ import {
   HelpCircle,
   Keyboard,
   Maximize,
+  Microscope,
   Minimize,
   PersonStanding,
   QrCode,
@@ -14,6 +15,18 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { THEME_LIST, type ThemeConfig, type ThemeId } from '../data/themes';
+
+function getThemeIcon(themeId: ThemeId) {
+  switch (themeId) {
+    case 'kroppens-evolusjon':
+      return PersonStanding;
+    case 'dyrecellen':
+      return Microscope;
+    case 'livets-tre':
+    default:
+      return TreePine;
+  }
+}
 
 interface TopBarProps {
   activeTheme: ThemeConfig;
@@ -57,7 +70,7 @@ export function TopBar({
     return () => document.removeEventListener('mousedown', handleOutside);
   }, [themeMenuOpen]);
 
-  const ActiveIcon = activeTheme.id === 'livets-tre' ? TreePine : PersonStanding;
+  const ActiveIcon = getThemeIcon(activeTheme.id);
 
   return (
     <header className="relative z-30 flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 lg:px-6 py-2.5 sm:py-3 border-b border-slate-800/80 bg-[#090E1A]/90 backdrop-blur-md">
@@ -108,15 +121,14 @@ export function TopBar({
           <div
             role="listbox"
             aria-label="Velg tema"
-            className="absolute left-0 top-full mt-2 w-[min(92vw,24rem)] p-2 rounded-2xl glass-panel border border-slate-700/90 shadow-2xl z-50 space-y-1.5 animate-card-enter"
+            className="absolute left-0 top-full mt-2 w-[min(92vw,25rem)] p-2 rounded-2xl glass-panel border border-slate-700/90 shadow-2xl z-50 space-y-1.5 animate-card-enter"
           >
             <div className="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Velg interaktivt tema
+              Velg interaktivt tema ({THEME_LIST.length})
             </div>
             {THEME_LIST.map((themeItem) => {
               const isCurrent = themeItem.id === activeTheme.id;
-              const ItemIcon =
-                themeItem.id === 'livets-tre' ? TreePine : PersonStanding;
+              const ItemIcon = getThemeIcon(themeItem.id);
 
               return (
                 <button
