@@ -11,6 +11,12 @@ import {
   BODY_NODES,
 } from './humanBodyData';
 import {
+  BODY_MCQ_QUESTIONS,
+  CELL_MCQ_QUESTIONS,
+  type McqQuestionItem,
+  TREE_MCQ_QUESTIONS,
+} from './mcqQuestionsData';
+import {
   CONTROL_QUESTIONS,
   MAIN_STEP_IDS,
   NODE_MAP,
@@ -42,6 +48,7 @@ export interface ThemeConfig {
   allNodes: TreeNodeData[];
   nodeMap: Record<string, TreeNodeData>;
   controlQuestions: ControlQuestionItem[];
+  mcqQuestions: McqQuestionItem[];
   quizShortcuts: { label: string; idx: number }[];
 }
 
@@ -69,6 +76,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
     allNodes: TREE_NODES,
     nodeMap: NODE_MAP,
     controlQuestions: CONTROL_QUESTIONS,
+    mcqQuestions: TREE_MCQ_QUESTIONS,
     quizShortcuts: [
       { label: 'Steg 2: Eukaryoter (2000 ma)', idx: 1 },
       { label: 'Steg 3: Dyr (660 ma)', idx: 2 },
@@ -100,6 +108,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
     allNodes: BODY_NODES,
     nodeMap: BODY_NODE_MAP,
     controlQuestions: BODY_CONTROL_QUESTIONS,
+    mcqQuestions: BODY_MCQ_QUESTIONS,
     quizShortcuts: [
       { label: 'Spor 1: Øynene & blind flekk', idx: 0 },
       { label: 'Spor 3: Visdomstenner', idx: 2 },
@@ -132,6 +141,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
     allNodes: CELL_NODES,
     nodeMap: CELL_NODE_MAP,
     controlQuestions: CELL_CONTROL_QUESTIONS,
+    mcqQuestions: CELL_MCQ_QUESTIONS,
     quizShortcuts: [
       { label: 'Del 1: Cellemembranen', idx: 0 },
       { label: 'Del 3: Cellekjernen (DNA)', idx: 2 },

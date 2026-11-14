@@ -290,14 +290,14 @@ export function App() {
 
       if (lightboxNode || isQrOpen) return;
 
-      if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        if (!isQuizOpen) {
+      if (!isQuizOpen) {
+        if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowDown') {
           e.preventDefault();
           handleNext();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          handlePrev();
         }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        handlePrev();
       }
     };
 
