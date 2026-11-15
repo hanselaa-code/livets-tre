@@ -5,6 +5,7 @@ import { HumanBodyExplorer } from './components/HumanBodyExplorer';
 import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
 import { PhylogeneticTree } from './components/PhylogeneticTree';
+import { PlantCellExplorer } from './components/PlantCellExplorer';
 import { QrShareModal } from './components/QrShareModal';
 import { QuizModal } from './components/QuizModal';
 import { TimelineDock } from './components/TimelineDock';
@@ -370,6 +371,14 @@ export function App() {
           )}
           {activeThemeId === 'dyrecellen' && (
             <AnimalCellExplorer
+              unlockedStepIndex={unlockedStepIndex}
+              showAllSteps={showAllSteps}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={handleSelectNode}
+            />
+          )}
+          {activeThemeId === 'plantecellen' && (
+            <PlantCellExplorer
               unlockedStepIndex={unlockedStepIndex}
               showAllSteps={showAllSteps}
               selectedNodeId={selectedNodeId}

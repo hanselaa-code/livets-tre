@@ -5,6 +5,7 @@ import {
   EyeOff,
   HelpCircle,
   Keyboard,
+  Leaf,
   Maximize,
   Microscope,
   Minimize,
@@ -22,6 +23,8 @@ function getThemeIcon(themeId: ThemeId) {
       return PersonStanding;
     case 'dyrecellen':
       return Microscope;
+    case 'plantecellen':
+      return Leaf;
     case 'livets-tre':
     default:
       return TreePine;

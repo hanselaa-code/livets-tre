@@ -14,8 +14,15 @@ import {
   BODY_MCQ_QUESTIONS,
   CELL_MCQ_QUESTIONS,
   type McqQuestionItem,
+  PLANT_CELL_MCQ_QUESTIONS,
   TREE_MCQ_QUESTIONS,
 } from './mcqQuestionsData';
+import {
+  PLANT_CELL_CONTROL_QUESTIONS,
+  PLANT_CELL_MAIN_STEP_IDS,
+  PLANT_CELL_NODE_MAP,
+  PLANT_CELL_NODES,
+} from './plantCellData';
 import {
   CONTROL_QUESTIONS,
   MAIN_STEP_IDS,
@@ -25,7 +32,11 @@ import {
   type TreeNodeData,
 } from './treeOfLifeData';
 
-export type ThemeId = 'livets-tre' | 'kroppens-evolusjon' | 'dyrecellen';
+export type ThemeId =
+  | 'livets-tre'
+  | 'kroppens-evolusjon'
+  | 'dyrecellen'
+  | 'plantecellen';
 
 export interface ThemeConfig {
   id: ThemeId;
@@ -151,12 +162,46 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
       { label: 'Del 8: Mitokondrier (ATP)', idx: 7 },
     ],
   },
+  plantecellen: {
+    id: 'plantecellen',
+    hash: '#plantecellen',
+    title: 'Eukaryot plantecelle – Cellevegg, kloroplaster og organeller',
+    dropdownTitle: 'Eukaryot plantecelle',
+    dropdownBadge: 'Cellemodell • Cellevegg, fotosyntese & vakuole',
+    dropdownDescription:
+      '3D-snitt av en plantecelle i midten – fra cellevegg og membran til kloroplaster, vakuole, kjerne og mitokondrier.',
+    subtitle:
+      'Interaktiv cellemodell • Fra celleveggen gjennom kloroplaster, vakuole og alle plantecellens organeller',
+    stepWord: 'Del',
+    showAllLabel: 'Vis alle organeller',
+    progressiveLabel: 'Stegvis modus',
+    quizTitle: 'Kontrollspørsmål: Eukaryot plantecelle',
+    backFromQuizLabel: 'Tilbake til plantecellen',
+    summaryHeadingPrefix: 'Oppgave i plantecellen',
+    traitsHeading: 'Oppbygning og nøkkelfunksjoner',
+    classroomBoxHeading: 'Husketriks & kobling i timen',
+    examplesHeading: 'Nøkkelbegreper å kunne',
+    mainStepIds: PLANT_CELL_MAIN_STEP_IDS,
+    allNodes: PLANT_CELL_NODES,
+    nodeMap: PLANT_CELL_NODE_MAP,
+    controlQuestions: PLANT_CELL_CONTROL_QUESTIONS,
+    mcqQuestions: PLANT_CELL_MCQ_QUESTIONS,
+    quizShortcuts: [
+      { label: 'Del 1: Celleveggen', idx: 0 },
+      { label: 'Del 3: Kloroplaster', idx: 2 },
+      { label: 'Del 4: Sentralvakuolen', idx: 3 },
+      { label: 'Del 5: Cellekjernen', idx: 4 },
+      { label: 'Del 8: Golgi & celleplate', idx: 7 },
+      { label: 'Del 9: Mitokondrier (ATP)', idx: 8 },
+    ],
+  },
 };
 
 export const THEME_LIST: ThemeConfig[] = [
   THEMES['livets-tre'],
   THEMES['kroppens-evolusjon'],
   THEMES.dyrecellen,
+  THEMES.plantecellen,
 ];
 
 export function parseThemeFromHash(hash: string): ThemeId {
@@ -170,6 +215,13 @@ export function parseThemeFromHash(hash: string): ThemeId {
     clean === 'eukaryot-dyrecelle'
   ) {
     return 'dyrecellen';
+  }
+  if (
+    clean === 'plantecellen' ||
+    clean === 'plantecelle' ||
+    clean === 'eukaryot-plantecelle'
+  ) {
+    return 'plantecellen';
   }
   return 'livets-tre';
 }

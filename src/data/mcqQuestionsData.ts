@@ -537,3 +537,180 @@ export const CELL_MCQ_QUESTIONS: McqQuestionItem[] = [
       'Både dyre- og planteceller har kjerne og mitokondrier! Men dyrecellen mangler stiv cellevegg og kloroplaster, har centrioler i centrosomet og bruker cytoskjelett + motorproteiner (som kinesin) til form og transport.',
   },
 ];
+
+// ============================================================================
+// TEMA 4: EUKARYOT PLANTECELLE (10 FLERVALGSSPØRSMÅL)
+// ============================================================================
+export const PLANT_CELL_MCQ_QUESTIONS: McqQuestionItem[] = [
+  {
+    id: 'plant-mcq-1',
+    number: 1,
+    relatedStepIndex: 0,
+    topicBadge: 'Del 1 • Celleveggen',
+    question:
+      'Hvilket karbohydrat utgjør hovedarmeringen i plantecellens stive cellevegg, og hva heter de små kanalene som kobler cytoplasmaet i naboceller direkte sammen?',
+    options: [
+      'Cellulose er hovedarmeringen, og kanalene gjennom celleveggen kalles plasmodesmata',
+      'Kitin er hovedarmeringen, og kanalene gjennom celleveggen kalles kjerneporer',
+      'Glykogen er hovedarmeringen, og kanalene gjennom celleveggen kalles sentrioler',
+      'Kolesterol er hovedarmeringen, og kanalene gjennom celleveggen kalles tylakoider',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Plantecellens cellevegg er armert med lange bunter av cellulose (limt sammen med pektin og hemicellulose), mens plasmodesmata fungerer som mikroskopiske tunneler mellom nabocellene!',
+  },
+  {
+    id: 'plant-mcq-2',
+    number: 2,
+    relatedStepIndex: 1,
+    topicBadge: 'Del 2 • Cellemembranen & osmose',
+    question:
+      'Hva skjer på cellenivå dersom en plantecelle legges i sterkt saltvann eller tørker kraftig ut (plasmolyse)?',
+    options: [
+      'Celleveggen løser seg opp, mens vakuolen svulmer opp til hele cellen sprekker',
+      'Vann trekkes ut av cellen ved osmose slik at cellemembranen løsner og krymper bort fra innsiden av den stive celleveggen',
+      'Kloroplastene slutter å lage klorofyll og forvandles direkte til nye mitokondrier',
+      'Cellemembranen blir til en ny cellevegg av vedstoff (lignin) for å stenge saltet inne',
+    ],
+    correctIndex: 1,
+    explanation:
+      'I saltvann er vannkonsentrasjonen lavere utenfor enn inni cellen. Dermed strømmer vann ut ved osmose, saftspenningen forsvinner, og cellemembranen slipper taket i celleveggen (plasmolyse)!',
+  },
+  {
+    id: 'plant-mcq-3',
+    number: 3,
+    relatedStepIndex: 2,
+    topicBadge: 'Del 3 • Kloroplaster & fotosyntese',
+    question:
+      'Hvor i kloroplasten sitter det grønne fargestoffet klorofyll, og hva er sluttproduktene av fotosyntesen?',
+    options: [
+      'Klorofyll sitter i mitokondrienes cristae, og sluttproduktene er karbondioksid (CO₂) og vann (H₂O)',
+      'Klorofyll flyter fritt i sentralvakuolen, og sluttproduktene er aminosyrer og melkesyre',
+      'Klorofyll sitter i tylakoidmembranene (stablet i grana), og sluttproduktene er druesukker (glukose, C₆H₁₂O₆) og oksygengass (O₂)',
+      'Klorofyll sitter i cellekjernens kjernelegeme, og sluttproduktene er cellulose og nitrogen',
+    ],
+    correctIndex: 2,
+    explanation:
+      'I tylakoidmembranene fanger klorofyll lysenergi som spalter vann og slipper ut O₂, mens Calvinsyklusen i stroma bruker CO₂ til å bygge glukose (6 CO₂ + 6 H₂O + lys → C₆H₁₂O₆ + 6 O₂)!',
+  },
+  {
+    id: 'plant-mcq-4',
+    number: 4,
+    relatedStepIndex: 3,
+    topicBadge: 'Del 4 • Sentralvakuolen',
+    question:
+      'Hvilke viktige oppgaver har den store sentralvakuolen (saftrommet) i en utvokst plantecelle?',
+    options: [
+      'Den kopierer kromosomene før celledeling og sender mRNA ut i cytoplasma',
+      'Den spinner cellulosetråder på utsiden av celleveggen og pumper oksygen inn i bladet',
+      'Den driver aerob celleånding om natta når kloroplastene ikke får sollys',
+      'Den skaper saftspenning (turgortrykk) ved osmose, lagrer vann, næring og fargestoffer, og bryter ned avfall ved lav pH',
+    ],
+    correctIndex: 3,
+    explanation:
+      'Sentralvakuolen utgjør ofte 50–90 % av plantecellens volum! Den holder urteaktige planter oppreist ved saftspenning mot celleveggen og overtar også rollen til dyrecellens lysosomer.',
+  },
+  {
+    id: 'plant-mcq-5',
+    number: 5,
+    relatedStepIndex: 4,
+    topicBadge: 'Del 5 • Cellekjernen & arvestoff',
+    question:
+      'På hvilke tre steder inne i én og samme grønne plantecelle finner vi eget arvestoff (DNA)?',
+    options: [
+      'I cellekjernen, i mitokondriene og i kloroplastene',
+      'I celleveggen, i sentralvakuolen og i Golgiapparatet',
+      'I cellemembranen, i glatt ER og i transportvesiklene',
+      'Kun i kloroplastene om dagen og i cellekjernen om natta',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Hovedarvestoffet ligger som lineære kromosomer i cellekjernen, mens både mitokondriene og kloroplastene har beholdt sitt eget ringformede bakterie-DNA fra endosymbiosen!',
+  },
+  {
+    id: 'plant-mcq-6',
+    number: 6,
+    relatedStepIndex: 5,
+    topicBadge: 'Del 6 • Cytoplasma & strømning',
+    question:
+      'I et lysmikroskop kan man se at kloroplastene seiler rundt i en jevn strøm inne i levende bladceller (cytoplasmastrømning). Hvorfor er dette nyttig for planten?',
+    options: [
+      'Det gjør at plantecellen kan løsne fra bladet og svømme fritt rundt i vann',
+      'Det fordeler næringsstoffer og gasser raskt i cytosol og flytter kloroplastene til optimal posisjon etter lysstyrken',
+      'Det pumper cellulose gjennom kjerneporene og rett inn i arvestoffet',
+      'Det erstatter behovet for både cellemembran og transportproteiner i røttene',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Motorproteiner langs aktinfilamenter driver cytoplasmastrømningen slik at stoffer fordeles effektivt rundt den store vakuolen, og slik at kloroplastene fanger mest mulig lys uten å bli solskadet!',
+  },
+  {
+    id: 'plant-mcq-7',
+    number: 7,
+    relatedStepIndex: 6,
+    topicBadge: 'Del 7 • Ribosomer & ER',
+    question:
+      'Hva er arbeidsdelingen mellom ribosomer/ru ER og glatt ER i en plantecelle?',
+    options: [
+      'Ru ER spalter vann med sollys, mens glatt ER lagrer blå og røde blomsterfarger',
+      'Ru ER bygger stive vedrør av lignin, mens glatt ER leser av mRNA og lager enzymer',
+      'Ribosomer og ru ER bygger og folder proteiner ut fra mRNA, mens glatt ER lager lipider som planteoljer til frø og voks til bladets kutikula',
+      'Både ru ER og glatt ER brukes utelukkende til å pumpe vann inn i sentralvakuolen',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Akkurat som i dyrecellen står ribosomene og ru ER for proteinsyntese (translasjon og folding), mens glatt ER produserer membranfett, energirike frøoljer og vannavstøtende overflatevoks!',
+  },
+  {
+    id: 'plant-mcq-8',
+    number: 8,
+    relatedStepIndex: 7,
+    topicBadge: 'Del 8 • Golgiapparatet & celledeling',
+    question:
+      'Hvilken ekstra nøkkelrolle har Golgiapparatet og vesiklene i en plantecelle sammenlignet med en dyrecelle?',
+    options: [
+      'De fanger opp sollys når bladet mister klorofyll om høsten',
+      'De kopierer mitokondrienes ring-DNA før planten blomstrer',
+      'De trekker cellemembranen sammen utenfra slik at celleveggen klippes i to',
+      'De produserer pektin og hemicellulose til celleveggen og bygger en ny skillevegg (celleplate) innenfra når plantecellen deler seg',
+    ],
+    correctIndex: 3,
+    explanation:
+      'Fordi den stive celleveggen hindrer innsnøring utenfra, sender plantens Golgistabler (diktyosomer) vesikler med veggmateriale til midten av cellen der de smelter sammen til en ny celleplate!',
+  },
+  {
+    id: 'plant-mcq-9',
+    number: 9,
+    relatedStepIndex: 8,
+    topicBadge: 'Del 9 • Mitokondrier i planter',
+    question:
+      'Hvilket utsagn om mitokondrier og kloroplaster i planter er biologisk riktig?',
+    options: [
+      'Planteceller har mitokondrier i både grønne blader og hvite røtter, og trenger aerob celleånding døgnet rundt for å skaffe ATP til cellens arbeid',
+      'Planteceller mangler mitokondrier helt fordi kloroplastene forsyner både blader og røtter direkte med ATP dag og natt',
+      'Kun visne blader om høsten har mitokondrier, mens friske sommerblader bare har kloroplaster',
+      'Kloroplaster finnes i alle rotceller under jorda, mens mitokondrier bare finnes i kronbladene',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Kloroplastene lager glukose i sollys (kun i grønne plantedeler!), mens mitokondriene finnes i alle levende planteceller og forbrenner glukose med O₂ til brukbar ATP hele døgnet!',
+  },
+  {
+    id: 'plant-mcq-10',
+    number: 10,
+    relatedStepIndex: 9,
+    topicBadge: 'Del 10 • Helhet & sammenligning',
+    question:
+      'Hvilke tre strukturer finnes i en grønn bladcelle hos en plante, men mangler i en eukaryot dyrecelle?',
+    options: [
+      'Cellemembran, ribosomer og mitokondrier',
+      'Cellevegg av cellulose (med plasmodesmata), kloroplaster og en stor sentralvakuole',
+      'Cellekjerne med porer, ru endoplasmatisk retikulum og Golgiapparat',
+      'Centrioler, fleksibel membran uten vegg og små spesialiserte lysosomer',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Både plante- og dyreceller har membran, kjerne, ribosomer, ER, Golgi og mitokondrier – men kun plantecellen har cellevegg av cellulose, kloroplaster og stor sentralvakuole!',
+  },
+];
+

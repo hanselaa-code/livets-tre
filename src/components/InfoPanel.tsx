@@ -4,6 +4,7 @@ import {
   Clock,
   FlaskConical,
   GitBranch,
+  Leaf,
   Lightbulb,
   Maximize2,
   Microscope,
@@ -275,6 +276,66 @@ export function InfoPanel({
                   </div>
                   <div className="text-sm font-extrabold text-white font-display">
                     Utforsk temaet «Eukaryot dyrecelle» og alle organellene
+                  </div>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-teal-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+
+        {/* Bridge button from Eukaryoter / Planter / Cyanobakterier in Livets Tre (or from Dyrecellen) directly to Eukaryot plantecelle */}
+        {(((node.id === 'eukaryotes' ||
+          node.id === 'cyanobacteria' ||
+          node.id === 'land_plants' ||
+          node.id === 'conifers' ||
+          node.id === 'flowering_plants') &&
+          activeTheme.id === 'livets-tre') ||
+          ((node.id === 'cell_membrane' || node.id === 'cell_cytoskeleton') &&
+            activeTheme.id === 'dyrecellen')) && (
+          <button
+            id="btn-bridge-to-plant-cell"
+            type="button"
+            onClick={() => onSwitchTheme('plantecellen')}
+            className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-emerald-500/20 via-lime-500/15 to-teal-500/15 hover:from-emerald-500/30 hover:to-lime-500/25 border border-emerald-400/45 text-left transition-all cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-400/20 border border-emerald-300/40 flex items-center justify-center shrink-0">
+                <Leaf className="w-5 h-5 text-emerald-300" />
+              </div>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-emerald-300">
+                  {activeTheme.id === 'dyrecellen'
+                    ? 'Sammenlign celletyper'
+                    : 'Dypdykk i plantecellen'}
+                </div>
+                <div className="text-sm font-extrabold text-white font-display">
+                  Utforsk temaet «Eukaryot plantecelle» (cellevegg, kloroplaster & vakuole)
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-emerald-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+          </button>
+        )}
+
+        {/* Bridge button from Plantecellen back to Eukaryot dyrecelle for direct classroom comparison */}
+        {(node.id === 'plant_cell_wall' || node.id === 'plant_cytoskeleton') &&
+          activeTheme.id === 'plantecellen' && (
+            <button
+              id="btn-bridge-plant-to-animal-cell"
+              type="button"
+              onClick={() => onSwitchTheme('dyrecellen')}
+              className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-teal-500/20 via-sky-500/15 to-emerald-500/15 hover:from-teal-500/30 hover:to-emerald-500/25 border border-teal-400/45 text-left transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-teal-400/20 border border-teal-300/40 flex items-center justify-center shrink-0">
+                  <Microscope className="w-5 h-5 text-teal-300" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-teal-300">
+                    Sammenlign celletyper
+                  </div>
+                  <div className="text-sm font-extrabold text-white font-display">
+                    Bytt til «Eukaryot dyrecelle» for å sammenligne
                   </div>
                 </div>
               </div>
