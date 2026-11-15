@@ -1,6 +1,7 @@
 import {
   Check,
   ChevronDown,
+  Dna,
   Eye,
   EyeOff,
   HelpCircle,
@@ -25,6 +26,8 @@ function getThemeIcon(themeId: ThemeId) {
       return Microscope;
     case 'plantecellen':
       return Leaf;
+    case 'proteinsyntesen':
+      return Dna;
     case 'livets-tre':
     default:
       return TreePine;

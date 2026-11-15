@@ -6,6 +6,7 @@ import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
 import { PhylogeneticTree } from './components/PhylogeneticTree';
 import { PlantCellExplorer } from './components/PlantCellExplorer';
+import { ProteinSynthesisTimeline } from './components/ProteinSynthesisTimeline';
 import { QrShareModal } from './components/QrShareModal';
 import { QuizModal } from './components/QuizModal';
 import { TimelineDock } from './components/TimelineDock';
@@ -379,6 +380,14 @@ export function App() {
           )}
           {activeThemeId === 'plantecellen' && (
             <PlantCellExplorer
+              unlockedStepIndex={unlockedStepIndex}
+              showAllSteps={showAllSteps}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={handleSelectNode}
+            />
+          )}
+          {activeThemeId === 'proteinsyntesen' && (
+            <ProteinSynthesisTimeline
               unlockedStepIndex={unlockedStepIndex}
               showAllSteps={showAllSteps}
               selectedNodeId={selectedNodeId}

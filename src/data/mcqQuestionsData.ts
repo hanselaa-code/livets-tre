@@ -714,3 +714,180 @@ export const PLANT_CELL_MCQ_QUESTIONS: McqQuestionItem[] = [
   },
 ];
 
+// ============================================================================
+// TEMA 5: PROTEINSYNTESEN (10 FLERVALGSSPØRSMÅL)
+// ============================================================================
+export const PROTEIN_MCQ_QUESTIONS: McqQuestionItem[] = [
+  {
+    id: 'prot-mcq-1',
+    number: 1,
+    relatedStepIndex: 0,
+    topicBadge: 'Steg 1 • DNA-genet åpnes i kjernen',
+    question:
+      'Hvorfor frakter ikke en eukaryot celle selve DNA-molekylet ut til ribosomene i cytoplasma når den skal lage et protein?',
+    options: [
+      'Fordi DNA er cellens uerstattelige «originalbok» med alle ~20 000 gener, og beskyttes trygt inne i cellekjernen mens kun arbeidskopier (mRNA) sendes ut',
+      'Fordi ribosomene bare finnes inne i mitokondriene og kloroplastene og ikke ute i cytoplasma',
+      'Fordi DNA-tråden bare inneholder tre ulike nitrogenbaser og mangler oppskriften på aminosyrer',
+      'Fordi cellemembranen bryter ned DNA dersom genet åpner seg ved promotoren',
+    ],
+    correctIndex: 0,
+    explanation:
+      'DNA blir alltid værende trygt beskyttet inne i cellekjernen – cellen lager i stedet mange kortlivede mRNA-arbeidskopier av akkurat det ene genet det er bruk for!',
+  },
+  {
+    id: 'prot-mcq-2',
+    number: 2,
+    relatedStepIndex: 1,
+    topicBadge: 'Steg 2 • Transkripsjon (DNA → pre-mRNA)',
+    question:
+      'Hvis maltråden i DNA har baserekkefølgen 3\'-TAC GGT CAA-5\', hvilken komplementær mRNA-sekvens vil enzymet RNA-polymerase bygge?',
+    options: [
+      '5\'-ATG CCA GTT-3\'',
+      '5\'-AUG CCA GUU-3\'',
+      '5\'-UAC GGU CAA-3\'',
+      '5\'-TUG CCU GAA-3\'',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Under transkripsjonen parer T i DNA med A i RNA, C med G, G med C – og A i DNA parer med urasil (U) i RNA, siden RNA aldri inneholder tymin (T)! Derfor gir TAC GGT CAA → AUG CCA GUU.',
+  },
+  {
+    id: 'prot-mcq-3',
+    number: 3,
+    relatedStepIndex: 2,
+    topicBadge: 'Steg 3 • Spleising og modning av mRNA',
+    question:
+      'Hva skjer under spleisingen av pre-mRNA inne i cellekjernen hos eukaryote organismer?',
+    options: [
+      'Aminosyrene klippes fra hverandre og pakkes inn i små transportvesikler fra Golgiapparatet',
+      'De to DNA-trådene limes permanent sammen slik at genet aldri kan leses flere ganger',
+      'Ikke-kodende introner klippes bort, mens de kodende eksonene skjøtes sammen til modent mRNA med 5\'-hette og poly-A-hale',
+      'Ribosomene klipper bort alle urasil-basene (U) og bytter dem ut med tymin (T)',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Huskeregelen: Introner blir INne i kjernen (klippes bort av spleisosomer), mens eksonene skjøtes sammen og EXporteres ut som ferdig mRNA! Alternativ spleising gjør at ett gen kan gi flere ulike proteiner.',
+  },
+  {
+    id: 'prot-mcq-4',
+    number: 4,
+    relatedStepIndex: 3,
+    topicBadge: 'Steg 4 • Eksport gjennom kjerneporen',
+    question:
+      'Hvilken struktur må det ferdig modnede mRNA-molekylet passere gjennom for å komme seg fra cellekjernen ut til ribosomene i cytoplasma?',
+    options: [
+      'Plasmodesmata-kanalene ytterst i celleveggen av cellulose',
+      'Ionepumpene i den ytre cellemembranen',
+      'Foldene (cristae) på den indre mitokondriemembranen',
+      'En kjernepore (kjerneporekompleks) i den doble kjernemembranen',
+    ],
+    correctIndex: 3,
+    explanation:
+      'Den doble kjernemembranen har tusenvis av kjerneporer som sjekker at mRNA-tråden er ferdig spleiset og utstyrt med 5\'-hette og poly-A-hale før den slipper ut i cytoplasma!',
+  },
+  {
+    id: 'prot-mcq-5',
+    number: 5,
+    relatedStepIndex: 4,
+    topicBadge: 'Steg 5 • Kodon og tRNA',
+    question:
+      'Hvorfor består den genetiske koden på mRNA av grupper på nettopp TRE baser av gangen (triplettkodon), og hvilken rolle har tRNA?',
+    options: [
+      'Tre baser gir 4 × 4 × 4 = 64 kombinasjoner – nok til å kode for alle de 20 aminosyrene + stoppsignaler – og tRNA tolker koden ved hjelp av antikodon i den ene enden og riktig aminosyre i den andre',
+      'Tre baser gir nøyaktig 12 kombinasjoner, og tRNA bygger selve cellekjernen rundt mRNA-tråden',
+      'Tre baser trengs for å lage sukkeret deoksyribose, og tRNA klipper bort introner inne i kjernen',
+      'Hver enkelt base koder for tre ulike proteiner samtidig, og tRNA fungerer som energikilde i stedet for ATP',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Én base (4 muligheter) eller to baser (4 × 4 = 16 muligheter) er for få til 20 aminosyrer. Tre baser gir 64 kodon (61 for aminosyrer + 3 stoppkodon), og tRNA kobler riktig aminosyre til riktig kodon!',
+  },
+  {
+    id: 'prot-mcq-6',
+    number: 6,
+    relatedStepIndex: 5,
+    topicBadge: 'Steg 6 • Start av translasjonen',
+    question:
+      'Hvilket kodon på mRNA fungerer som startkodon når ribosomet starter translasjonen, og hvilken første aminosyre setter det inn?',
+    options: [
+      'UAA – som setter inn aminosyren glysin',
+      'AUG – som setter inn aminosyren metionin og fastsetter leserammen',
+      'TAC – som setter inn tymin på ribosomet',
+      'GGG – som klipper løs den ferdige proteinkjeden',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Startkodonet AUG gjør to viktige jobber samtidig: det koder for aminosyren metionin (Met) og låser leserammen slik at ribosomet leser tre og tre baser riktig herfra!',
+  },
+  {
+    id: 'prot-mcq-7',
+    number: 7,
+    relatedStepIndex: 6,
+    topicBadge: 'Steg 7 • Kjedeforlengelse på ribosomet',
+    question:
+      'Hva kalles den sterke kjemiske bindingen som ribosomet kobler sammen mellom hver aminosyre i den voksende kjeden?',
+    options: [
+      'Svak hydrogenbinding mellom nitrogenbaser',
+      'Osmotisk binding gjennom en halvgjennomtrengelig membran',
+      'Peptidbinding – som kjeder aminosyrene sammen til en lang polypeptidkjede',
+      'Esterbinding mellom fettsyrer og glyserol',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Ribosomet (ved hjelp av rRNA) smir kovalente peptidbindinger mellom aminosyrene etter hvert som nye tRNA ankommer – derfor kalles den voksende perlekjeden en polypeptidkjede!',
+  },
+  {
+    id: 'prot-mcq-8',
+    number: 8,
+    relatedStepIndex: 7,
+    topicBadge: 'Steg 8 • Stoppkodon (UAA, UAG, UGA)',
+    question:
+      'Hva skjer når ribosomet kommer fram til et stoppkodon (UAA, UAG eller UGA) på mRNA-tråden?',
+    options: [
+      'Et spesielt tRNA setter inn en siste «stopp-aminosyre» før kjeden sendes tilbake inn i cellekjernen',
+      'RNA-polymerase starter umiddelbart å kopiere proteinet tilbake til nytt DNA',
+      'Mitokondriet sluker hele ribosomet for å utvinne ATP fra mRNA-tråden',
+      'Ingen tRNA passer til stoppkodonet; i stedet binder en frigjøringsfaktor seg, klipper løs den ferdige polypeptidkjeden, og ribosomdelene går fra hverandre',
+    ],
+    correctIndex: 3,
+    explanation:
+      'Stoppkodonene UAA, UAG og UGA koder IKKE for noen aminosyre! En frigjøringsfaktor («release factor») sørger for at polypeptidkjeden frigjøres fra ribosomet.',
+  },
+  {
+    id: 'prot-mcq-9',
+    number: 9,
+    relatedStepIndex: 8,
+    topicBadge: 'Steg 9 • 3D-folding, ER & Golgi',
+    question:
+      'Hvorfor må polypeptidkjeden foldes til en bestemt tredimensjonal form (og ofte ferdigbehandles i ru ER og Golgiapparatet) før proteinet virker?',
+    options: [
+      'Fordi det er den nøyaktige 3D-formen som gjør at proteinet passer til oppgaven sin (f.eks. det aktive setet i et enzym), og proteiner som skal ut av cellen må pakkes og adresseres i ru ER og Golgi',
+      'Fordi bare helt rette, ufoldede aminosyrekjeder kan frakte oksygen i blodet',
+      'Fordi folding endrer rekkefølgen på genene inne i cellekjernens DNA',
+      'Fordi Golgiapparatet bytter ut alle aminosyrene med glukose og cellulose',
+    ],
+    correctIndex: 0,
+    explanation:
+      'I proteiner gir form funksjon! Tiltrekning og frastøting mellom de 20 ulike aminosyrene får kjeden til å brette seg i alfa-helikser og beta-flak til et presist 3D-verktøy (som ødelegges ved denaturering).',
+  },
+  {
+    id: 'prot-mcq-10',
+    number: 10,
+    relatedStepIndex: 9,
+    topicBadge: 'Steg 10 • Funksjon & mutasjoner',
+    question:
+      'Hvorfor gir sletting eller innsetting av én enkelt base tidlig i et gen som regel mye mer dramatiske følger for proteinet enn utbytting av én base?',
+    options: [
+      'Fordi sletting av én base stopper all produksjon av ATP i mitokondriene i hele kroppen',
+      'Fordi sletting eller innsetting av én base forskyver hele leserammen («frameshift»), slik at absolutt alle trebokstavskodon etter mutasjonen endres',
+      'Fordi utbytting av én base alltid sletter hele kromosomet inne i cellekjernen',
+      'Fordi ribosomet bare klarer å lese gener med et partall antall baser',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Ved substitusjon (utbytting av én base) endres høyst ett eneste kodon (og gir ofte samme aminosyre pga. redundant kode). Ved sletting/innsetting av én base forskyves trebokstavsgrupperingen for hele resten av genet!',
+  },
+];
+
+

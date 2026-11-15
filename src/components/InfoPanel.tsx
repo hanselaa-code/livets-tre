@@ -2,6 +2,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Clock,
+  Dna,
   FlaskConical,
   GitBranch,
   Leaf,
@@ -336,6 +337,66 @@ export function InfoPanel({
                   </div>
                   <div className="text-sm font-extrabold text-white font-display">
                     Bytt til «Eukaryot dyrecelle» for å sammenligne
+                  </div>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-teal-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+
+        {/* Bridge button from Cellekjernen / Ribosomer / ER / Golgi (or LUCA) directly to Proteinsyntesen */}
+        {(((node.id === 'cell_nucleus' ||
+          node.id === 'cell_ribosomes' ||
+          node.id === 'cell_er' ||
+          node.id === 'cell_golgi') &&
+          activeTheme.id === 'dyrecellen') ||
+          ((node.id === 'plant_nucleus' ||
+            node.id === 'plant_er_ribosomes' ||
+            node.id === 'plant_golgi') &&
+            activeTheme.id === 'plantecellen') ||
+          (node.id === 'luca' && activeTheme.id === 'livets-tre')) && (
+          <button
+            id="btn-bridge-to-protein-synthesis"
+            type="button"
+            onClick={() => onSwitchTheme('proteinsyntesen')}
+            className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-sky-500/20 via-teal-500/15 to-amber-500/15 hover:from-sky-500/30 hover:to-amber-500/25 border border-sky-400/45 text-left transition-all cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-sky-400/20 border border-sky-300/40 flex items-center justify-center shrink-0">
+                <Dna className="w-5 h-5 text-sky-300" />
+              </div>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-sky-300">
+                  Følg oppskriften steg for steg
+                </div>
+                <div className="text-sm font-extrabold text-white font-display">
+                  Åpne tidslinjen «Proteinsyntesen» (DNA → mRNA → Protein)
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-sky-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+          </button>
+        )}
+
+        {/* Bridge button from Proteinsyntesen back to Eukaryot dyrecelle */}
+        {(node.id === 'prot_nuclear_export' || node.id === 'prot_folding') &&
+          activeTheme.id === 'proteinsyntesen' && (
+            <button
+              id="btn-bridge-protein-to-cell"
+              type="button"
+              onClick={() => onSwitchTheme('dyrecellen')}
+              className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-teal-500/20 via-sky-500/15 to-emerald-500/15 hover:from-teal-500/30 hover:to-emerald-500/25 border border-teal-400/45 text-left transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-teal-400/20 border border-teal-300/40 flex items-center justify-center shrink-0">
+                  <Microscope className="w-5 h-5 text-teal-300" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-teal-300">
+                    Se hvor i cellen dette skjer
+                  </div>
+                  <div className="text-sm font-extrabold text-white font-display">
+                    Utforsk kjerne, ribosomer, ER og Golgi i «Eukaryot dyrecelle»
                   </div>
                 </div>
               </div>

@@ -15,6 +15,7 @@ import {
   CELL_MCQ_QUESTIONS,
   type McqQuestionItem,
   PLANT_CELL_MCQ_QUESTIONS,
+  PROTEIN_MCQ_QUESTIONS,
   TREE_MCQ_QUESTIONS,
 } from './mcqQuestionsData';
 import {
@@ -23,6 +24,12 @@ import {
   PLANT_CELL_NODE_MAP,
   PLANT_CELL_NODES,
 } from './plantCellData';
+import {
+  PROTEIN_CONTROL_QUESTIONS,
+  PROTEIN_MAIN_STEP_IDS,
+  PROTEIN_NODE_MAP,
+  PROTEIN_NODES,
+} from './proteinSynthesisData';
 import {
   CONTROL_QUESTIONS,
   MAIN_STEP_IDS,
@@ -36,7 +43,8 @@ export type ThemeId =
   | 'livets-tre'
   | 'kroppens-evolusjon'
   | 'dyrecellen'
-  | 'plantecellen';
+  | 'plantecellen'
+  | 'proteinsyntesen';
 
 export interface ThemeConfig {
   id: ThemeId;
@@ -195,6 +203,39 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
       { label: 'Del 9: Mitokondrier (ATP)', idx: 8 },
     ],
   },
+  proteinsyntesen: {
+    id: 'proteinsyntesen',
+    hash: '#proteinsyntesen',
+    title: 'Proteinsyntesen – Fra DNA-gen til ferdig 3D-protein',
+    dropdownTitle: 'Proteinsyntesen (steg for steg)',
+    dropdownBadge: 'Tidslinje • DNA → mRNA → Protein',
+    dropdownDescription:
+      'Steg-for-steg tidslinje gjennom transkripsjon og spleising i cellekjernen, ut gjennom kjerneporen til ribosom, tRNA og 3D-folding.',
+    subtitle:
+      'Interaktiv tidslinje • 10 steg fra DNA i cellekjernen via mRNA og ribosom til ferdig foldet protein',
+    stepWord: 'Steg',
+    showAllLabel: 'Vis hele tidslinjen',
+    progressiveLabel: 'Stegvis modus',
+    quizTitle: 'Kontrollspørsmål: Proteinsyntesen',
+    backFromQuizLabel: 'Tilbake til tidslinjen',
+    summaryHeadingPrefix: 'Hva skjer i dette steget?',
+    traitsHeading: 'Molekylære mekanismer og nøkkelpunkter',
+    classroomBoxHeading: 'Husketriks & tavleøvelse i timen',
+    examplesHeading: 'Nøkkelbegreper på dette steget',
+    mainStepIds: PROTEIN_MAIN_STEP_IDS,
+    allNodes: PROTEIN_NODES,
+    nodeMap: PROTEIN_NODE_MAP,
+    controlQuestions: PROTEIN_CONTROL_QUESTIONS,
+    mcqQuestions: PROTEIN_MCQ_QUESTIONS,
+    quizShortcuts: [
+      { label: 'Steg 1: DNA-genet åpnes', idx: 0 },
+      { label: 'Steg 2: Transkripsjon (mRNA)', idx: 1 },
+      { label: 'Steg 3: Spleising (intron/ekson)', idx: 2 },
+      { label: 'Steg 5: Kodon & tRNA', idx: 4 },
+      { label: 'Steg 6: Startkodon AUG', idx: 5 },
+      { label: 'Steg 9: 3D-folding & Golgi', idx: 8 },
+    ],
+  },
 };
 
 export const THEME_LIST: ThemeConfig[] = [
@@ -202,6 +243,7 @@ export const THEME_LIST: ThemeConfig[] = [
   THEMES['kroppens-evolusjon'],
   THEMES.dyrecellen,
   THEMES.plantecellen,
+  THEMES.proteinsyntesen,
 ];
 
 export function parseThemeFromHash(hash: string): ThemeId {
@@ -222,6 +264,13 @@ export function parseThemeFromHash(hash: string): ThemeId {
     clean === 'eukaryot-plantecelle'
   ) {
     return 'plantecellen';
+  }
+  if (
+    clean === 'proteinsyntesen' ||
+    clean === 'proteinsyntese' ||
+    clean === 'dna-til-protein'
+  ) {
+    return 'proteinsyntesen';
   }
   return 'livets-tre';
 }
