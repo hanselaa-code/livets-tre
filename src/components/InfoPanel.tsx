@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { ThemeConfig, ThemeId } from '../data/themes';
 import type { TreeNodeData } from '../data/treeOfLifeData';
+import { NodeVideoPlayer } from './NodeVideoPlayer';
 import { TraitIcon } from './TraitIcon';
 
 interface InfoPanelProps {
@@ -114,30 +115,38 @@ export function InfoPanel({
           </div>
         </header>
 
-        {/* Hero Nano Banana 16:9 Illustration */}
-        <figure className="relative group rounded-xl overflow-hidden border border-slate-700/70 bg-slate-900 shadow-lg">
-          <div className="aspect-video w-full overflow-hidden bg-slate-950">
-            <img
-              src={node.image}
-              alt={`${node.title} (${node.latinName})`}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03] cursor-zoom-in"
+        {/* Hero Nano Banana 16:9 Illustration (or click-to-play Video over the Illustration) */}
+        {node.videoUrl ? (
+          <NodeVideoPlayer
+            node={node}
+            videoUrl={node.videoUrl}
+            onOpenLightbox={onOpenLightbox}
+          />
+        ) : (
+          <figure className="relative group rounded-xl overflow-hidden border border-slate-700/70 bg-slate-900 shadow-lg">
+            <div className="aspect-video w-full overflow-hidden bg-slate-950">
+              <img
+                src={node.image}
+                alt={`${node.title} (${node.latinName})`}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03] cursor-zoom-in"
+                onClick={() => onOpenLightbox(node)}
+              />
+            </div>
+            <button
+              id="btn-expand-image"
+              type="button"
               onClick={() => onOpenLightbox(node)}
-            />
-          </div>
-          <button
-            id="btn-expand-image"
-            type="button"
-            onClick={() => onOpenLightbox(node)}
-            title="Forstørr bilde for storskjerm"
-            className="absolute top-2.5 right-2.5 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-950/75 hover:bg-slate-900/95 text-slate-200 text-xs font-medium border border-white/15 opacity-90 group-hover:opacity-100 transition-all cursor-pointer"
-          >
-            <Maximize2 className="w-3.5 h-3.5" />
-            <span>Storskjermbilde</span>
-          </button>
-          <figcaption className="px-3.5 py-2 bg-slate-950/85 text-xs text-slate-300 border-t border-slate-800/80 leading-relaxed">
-            {node.imageCaption}
-          </figcaption>
-        </figure>
+              title="Forstørr bilde for storskjerm"
+              className="absolute top-2.5 right-2.5 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-950/75 hover:bg-slate-900/95 text-slate-200 text-xs font-medium border border-white/15 opacity-90 group-hover:opacity-100 transition-all cursor-pointer"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+              <span>Storskjermbilde</span>
+            </button>
+            <figcaption className="px-3.5 py-2 bg-slate-950/85 text-xs text-slate-300 border-t border-slate-800/80 leading-relaxed">
+              {node.imageCaption}
+            </figcaption>
+          </figure>
+        )}
 
         {/* Main pedagogical summary */}
         <section className="space-y-2">

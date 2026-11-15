@@ -52,6 +52,8 @@ export interface TreeNodeData {
   /** Relative path or embedded data URI to Nano Banana natural illustration */
   image: string;
   imageCaption: string;
+  /** Optional Cloudflare Stream (.m3u8) or MP4 video URL – plays on click over the poster image */
+  videoUrl?: string;
   summaryTitle: string;
   whatHappens: string;
   keyTraits: KeyTrait[];
@@ -118,6 +120,8 @@ export const TREE_NODES: TreeNodeData[] = [
     labelAnchor: 'bottom',
     image: evoImg('origin.png'),
     imageCaption: 'Hydrotermiske skorsteiner på havbunnen for 3,7 milliarder år siden – et sannsynlig vugge-miljø for det første livet.',
+    videoUrl:
+      'https://customer-ptqou8a0ltgo3iem.cloudflarestream.com/d790220b548823c7e6ec63e3c7d0f5ec/manifest/video.m3u8',
     summaryTitle: 'En felles stamfar for alt liv på jorda',
     whatHappens:
       'Dypt nede i urhavet, trolig rundt varme, mineralrike hydrotermiske kilder på havbunnen, oppstår de første levende cellene for rundt 3,7 milliarder år siden. LUCA (Last Universal Common Ancestor) er den encellede ur-organismen som absolutt alt nålevende liv på jorda – fra bakterier og sopp til blågran og mennesker – stammer fra. Herfra deler livets tre seg tidlig i Eubakterier, Arker og linjen som senere gir opphav til Eukaryotene.',

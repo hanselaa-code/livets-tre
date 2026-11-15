@@ -239,6 +239,7 @@ export function App() {
         target &&
         (target.tagName === 'INPUT' ||
           target.tagName === 'TEXTAREA' ||
+          target.tagName === 'VIDEO' ||
           target.isContentEditable)
       ) {
         return;
