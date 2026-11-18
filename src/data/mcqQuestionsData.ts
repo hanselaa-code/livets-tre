@@ -890,4 +890,178 @@ export const PROTEIN_MCQ_QUESTIONS: McqQuestionItem[] = [
   },
 ];
 
-
+// ============================================================================
+// TEMA 6: DNA-STRUKTUR OG REPLIKASJON (10 FLERVALGSSPØRSMÅL)
+// ============================================================================
+export const DNA_MCQ_QUESTIONS: McqQuestionItem[] = [
+  {
+    id: 'dna-mcq-1',
+    number: 1,
+    relatedStepIndex: 0,
+    topicBadge: 'Steg 1 • Cellekjernen & kromosomene',
+    question:
+      'Hvordan er arvestoffet organisert i en vanlig menneskelig kroppscelle, og hva menes med et gen?',
+    options: [
+      'Cellen har 23 enkeltstående kromosomer uten par, og hvert kromosom utgjør ett eneste stort gen',
+      'Cellen har 46 kromosomer fordelt på 23 homologe par (ett sett fra mor og ett fra far), og et gen er et avgrenset avsnitt langs DNA-tråden med oppskrift på et protein eller funksjonelt RNA',
+      'Bare hjerneceller og muskelceller har 46 kromosomer, mens hudceller kun beholder de genene de bruker til daglig',
+      'Kromosomene ligger alltid pakket som tette X-figurer hele døgnet slik at genene er lette å lese',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Alle vanlige kroppsceller inneholder de samme 46 kromosomene (23 par). Til vanlig ligger DNA-et løst utrullet som kromatin så genene kan leses, og kondenseres først til tette kromosomer rett før celledeling!',
+  },
+  {
+    id: 'dna-mcq-2',
+    number: 2,
+    relatedStepIndex: 1,
+    topicBadge: 'Steg 2 • Histoner & epigenetikk',
+    question:
+      'Hvilke to viktige oppgaver løser histon-proteinene når 2 meter DNA pakkes til nukleosomer og kromatin inne i cellekjernen?',
+    options: [
+      'Histonene klipper bort alle ubrukte gener og frakter dem ut gjennom kjerneporene til nedbrytning',
+      'Histonene bytter ut tymin (T) med urasil (U) hver gang cellen trenger ekstra energi i form av ATP',
+      'Histonene sveiser sammen de to DNA-trådene med kovalente bindinger slik at trådene aldri kan åpnes',
+      'De positivt ladde histonene spoler opp det negativt ladde DNA-et uten floker, og styrer via stram eller åpen pakking hvilke gener cellen kan lese (epigenetikk)',
+    ],
+    correctIndex: 3,
+    explanation:
+      'Nukleosomer («perler på en snor» av DNA rundt histoner) gir enorm plassbesparelse og fungerer samtidig som epigenetiske av/på-brytere: åpent kromatin kan leses av RNA-polymerase, mens tettpakket kromatin skrur genene av!',
+  },
+  {
+    id: 'dna-mcq-3',
+    number: 3,
+    relatedStepIndex: 2,
+    topicBadge: 'Steg 3 • Nukleotidets tre deler',
+    question:
+      'Hvilke tre kjemiske deler er hvert enkelt nukleotid i DNA bygd opp av – og hvorfor heter sukkeret akkurat DEOKSY-ribose?',
+    options: [
+      'En fosfatgruppe, femkarbonsukkeret deoksyribose (som mangler ett oksygenatom sammenlignet med ribose i RNA, noe som gjør DNA mer stabilt) og én av nitrogenbasene A, T, C eller G',
+      'En aminogruppe, en karboksylgruppe og en variabel sidekjede (R-gruppe) med svovelbindinger',
+      'Tre fettsyrer, ett glyserolmolekyl og én av nitrogenbasene A, U, C eller G',
+      'En glukosering, to peptidbindinger og et positivt ladd histon-protein i midten',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Hvert DNA-nukleotid består av fosfat + deoksyribose + base (A, T, C eller G). Fraværet av ett oksygenatom på karbon 2\' i deoksyribose gjør DNA langt mer kjemisk stabilt enn RNA – perfekt som livslangt arkiv!',
+  },
+  {
+    id: 'dna-mcq-4',
+    number: 4,
+    relatedStepIndex: 3,
+    topicBadge: 'Steg 4 • Chargaffs regel & H-bindinger',
+    question:
+      'En prøve med dobbelttrådet DNA inneholder 18 % guanin (G). Hvor mange prosent adenin (A) inneholder prøven ifølge baseparingsregelen, og hvorfor?',
+    options: [
+      '18 % adenin, fordi alle de fire nitrogenbasene alltid forekommer i nøyaktig lik mengde i DNA',
+      '64 % adenin, fordi G bare utgjør halvparten av pyrimidinene i dobbelheliksen',
+      '32 % adenin, fordi G alltid parer med C (18 % G + 18 % C = 36 %), og de resterende 64 % fordeles likt mellom A (32 %) og T (32 %)',
+      '41 % adenin, fordi C–G har tre hydrogenbindinger mens A–T bare har to',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Etter Chargaffs regel parer alltid G med C (3 hydrogenbindinger) og A med T (2 hydrogenbindinger). 18 % G gir 18 % C = 36 % til sammen. Da gjenstår 100 % − 36 % = 64 %, som deles likt på A og T → 32 % adenin!',
+  },
+  {
+    id: 'dna-mcq-5',
+    number: 5,
+    relatedStepIndex: 4,
+    topicBadge: 'Steg 5 • Dobbelheliksen & antiparallelle tråder',
+    question:
+      'Hva menes med at de to trådene i DNA-dobbelheliksen er antiparallelle, og hvilke bindinger holder reisverket sammen sammenlignet med trinnene i midten?',
+    options: [
+      'Begge trådene går i retning 5\' → 3\' samme vei, med svake hydrogenbindinger ytterst i vangene og kovalente bindinger i midten',
+      'Den ene tråden går i retning 5\' → 3\' mens den andre løper motsatt vei (3\' → 5\'), med sterke kovalente sukker-fosfat-bindinger ytterst og svake hydrogenbindinger mellom baseparene innerst',
+      'Den ene tråden består bare av sukker og fosfat, mens den andre tråden bare består av sammenkjedede nitrogenbaser',
+      'De to trådene snurrer i hver sin retning uten å røre hverandre før cellen skal dele seg i mitosen',
+    ],
+    correctIndex: 1,
+    explanation:
+      'De ytre vangene holdes sammen av sterke kovalente fosfodiesterbindinger så baserekkefølgen aldri ryker, mens trinnene i midten har hydrogenbindinger som kan åpnes som en glidelås. Trådene ligger opp-ned mot hverandre: 5\' → 3\' mot 3\' → 5\'!',
+  },
+  {
+    id: 'dna-mcq-6',
+    number: 6,
+    relatedStepIndex: 5,
+    topicBadge: 'Steg 6 • Semikonservativ replikasjon',
+    question:
+      'Hvorfor sier vi at DNA-replikasjonen i S-fasen før celledeling er semikonservativ («halvt bevarende»)?',
+    options: [
+      'Fordi begge de opprinnelige trådene fungerer som mal, slik at hvert av de to nye DNA-molekylene består av én gammel «foreldretråd» og én nylaget komplementær tråd',
+      'Fordi bare halvparten av de 46 kromosomene kopieres før hver vanlig celledeling (mitose)',
+      'Fordi det ene nye DNA-molekylet beholder begge de to gamle trådene, mens det andre består av to helt nylagede tråder',
+      'Fordi annenhver nitrogenbase langs tråden byttes ut med urasil (U) under kopieringen',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Som Meselson og Stahl beviste i 1958, skilles de to foreldretrådene ad og brukes som støpeform (mal) for hver sin nye tråd – dermed får begge dattermolekylene nøyaktig én gammel og én ny tråd!',
+  },
+  {
+    id: 'dna-mcq-7',
+    number: 7,
+    relatedStepIndex: 6,
+    topicBadge: 'Steg 7 • Replikasjonsgaffel & helikase',
+    question:
+      'Hvilken oppgave har enzymet helikase i replikasjonsgaffelen, og hvorfor starter DNA-kopieringen ved tusenvis av replikasjonsbobler samtidig hos mennesket?',
+    options: [
+      'Helikase limer sammen ferdige DNA-biter, og boblene oppstår kun når DNA skades av UV-stråling',
+      'Helikase oversetter mRNA til aminosyrer, og boblene frakter proteiner ut gjennom kjernemembranen',
+      'Helikase tvinner DNA strammere rundt histonene slik at celledelingen bruker minst mulig ATP',
+      'Helikase åpner DNA-dobbelheliksen ved å bryte hydrogenbindingene mellom baseparene som en glidelås, og tusenvis av samtidige startbobler gjør at alle 6 milliarder basepar rekker å kopieres på få timer',
+    ],
+    correctIndex: 3,
+    explanation:
+      'Helikase kløyver hydrogenbindingene i Y-krysset (replikasjonsgaffelen), topoisomerase fjerner snurrespenning foran gaffelen, og primase legger en kort RNA-primer slik at kopieringen kommer raskt i gang over hele kromosomet samtidig!',
+  },
+  {
+    id: 'dna-mcq-8',
+    number: 8,
+    relatedStepIndex: 7,
+    topicBadge: 'Steg 8 • DNA-polymerase & Okazaki-fragmenter',
+    question:
+      'Hvorfor må den «forsinkede tråden» (lagging strand) bygges baklengs i små Okazaki-fragmenter som deretter sveises sammen av enzymet DNA-ligase?',
+    options: [
+      'Fordi den forsinkede tråden mangler fosfatgrupper og må låne sukker fra nabokromosomet',
+      'Fordi helikase bare klarer å åpne én base i minuttet på den nederste av de to DNA-trådene',
+      'Fordi DNA-polymerase KUN kan bygge ny tråd i retningen 5\' → 3\', og på den antiparallelle maltråden som peker motsatt vei av gaffelbevegelsen må den derfor sy stykkevis bakover ut fra gaffelen',
+      'Fordi Okazaki-fragmentene skal klippes ut som introner før DNA sendes ut til ribosomene',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Siden DNA-polymerase bare kan hekte nukleotider på 3\'-enden (bygger kun 5\' → 3\'), bygges den ledende tråden sammenhengende inn i gaffelen, mens den forsinkede tråden må sys i korte Okazaki-fragmenter før DNA-ligase limer skjøtene sammen!',
+  },
+  {
+    id: 'dna-mcq-9',
+    number: 9,
+    relatedStepIndex: 8,
+    topicBadge: 'Steg 9 • Korrekturlesing & mutasjoner',
+    question:
+      'Hva avgjør om en nyoppstått mutasjon i DNA kan gå i arv til neste generasjon barn?',
+    options: [
+      'Mutasjonen går kun i arv dersom den oppstår i kjønnsceller (egg- eller sædceller / deres forstadier); mutasjoner i vanlige kroppsceller som hud- eller lungeceller dør ut med individet',
+      'Alle mutasjoner som skjer i hudceller pga. sollys (UV-stråling) går automatisk videre til barna',
+      'Bare mutasjoner som skyldes kjemikalier går i arv, mens spontane kopieringsfeil aldri kan arves',
+      'Mutasjoner kan bare arves dersom DNA-polymerase slutter helt å drive korrekturlesing i alle celler',
+    ],
+    correctIndex: 0,
+    explanation:
+      'DNA-polymerase og reparasjonsenzymer retter ~99,9 % av alle kopieringsfeil (~1 feil per milliard baser). Skjer en varig mutasjon i en kroppscelle, rammer den kun individet selv – kun mutasjoner i kjønnsceller føres videre til avkommet!',
+  },
+  {
+    id: 'dna-mcq-10',
+    number: 10,
+    relatedStepIndex: 9,
+    topicBadge: 'Steg 10 • Søsterkromatider & evolusjon',
+    question:
+      'Hva kalles de to identiske DNA-kopiene som henger sammen i sentromeren rett etter replikasjonen, og hvorfor er sjeldne mutasjoner i kjønnsceller avgjørende for «Livets Tre»?',
+    options: [
+      'De kalles antikodon, og mutasjoner hindrer at naturlig utvalg kan virke på en populasjon',
+      'De kalles ribosomer, og mutasjoner gjør at alle individer i en art får 100 % likt arvestoff',
+      'De kalles søsterkromatider (klare til å fordeles ved celledeling), og sjeldne arvelige mutasjoner skaper nye genvarianter (alleler) som utgjør selve råmaterialet for naturlig utvalg og evolusjon',
+      'De kalles introner, og mutasjoner brukes kun til å reparere ødelagte mitokondrier etter celledeling',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Etter S-fasen består hvert kromosom av to identiske søsterkromatider festet i sentromeren. Og mens presis kopiering bevarer artens oppskrifter, skaper sjeldne kjønnscellemutasjoner de nye allelene som driver evolusjonen videre!',
+  },
+];

@@ -1,6 +1,7 @@
 import { Minimize } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { AnimalCellExplorer } from './components/AnimalCellExplorer';
+import { DnaReplicationExplorer } from './components/DnaReplicationExplorer';
 import { HumanBodyExplorer } from './components/HumanBodyExplorer';
 import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
@@ -380,6 +381,14 @@ export function App() {
           )}
           {activeThemeId === 'plantecellen' && (
             <PlantCellExplorer
+              unlockedStepIndex={unlockedStepIndex}
+              showAllSteps={showAllSteps}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={handleSelectNode}
+            />
+          )}
+          {activeThemeId === 'dna-replikasjon' && (
+            <DnaReplicationExplorer
               unlockedStepIndex={unlockedStepIndex}
               showAllSteps={showAllSteps}
               selectedNodeId={selectedNodeId}

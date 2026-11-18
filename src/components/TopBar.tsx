@@ -4,6 +4,7 @@ import {
   Dna,
   Eye,
   EyeOff,
+  FlaskConical,
   HelpCircle,
   Keyboard,
   Leaf,
@@ -26,8 +27,10 @@ function getThemeIcon(themeId: ThemeId) {
       return Microscope;
     case 'plantecellen':
       return Leaf;
-    case 'proteinsyntesen':
+    case 'dna-replikasjon':
       return Dna;
+    case 'proteinsyntesen':
+      return FlaskConical;
     case 'livets-tre':
     default:
       return TreePine;

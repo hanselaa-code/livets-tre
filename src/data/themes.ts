@@ -5,6 +5,12 @@ import {
   CELL_NODES,
 } from './animalCellData';
 import {
+  DNA_CONTROL_QUESTIONS,
+  DNA_MAIN_STEP_IDS,
+  DNA_NODE_MAP,
+  DNA_NODES,
+} from './dnaReplicationData';
+import {
   BODY_CONTROL_QUESTIONS,
   BODY_MAIN_STEP_IDS,
   BODY_NODE_MAP,
@@ -13,6 +19,7 @@ import {
 import {
   BODY_MCQ_QUESTIONS,
   CELL_MCQ_QUESTIONS,
+  DNA_MCQ_QUESTIONS,
   type McqQuestionItem,
   PLANT_CELL_MCQ_QUESTIONS,
   PROTEIN_MCQ_QUESTIONS,
@@ -44,6 +51,7 @@ export type ThemeId =
   | 'kroppens-evolusjon'
   | 'dyrecellen'
   | 'plantecellen'
+  | 'dna-replikasjon'
   | 'proteinsyntesen';
 
 export interface ThemeConfig {
@@ -203,6 +211,39 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
       { label: 'Del 9: Mitokondrier (ATP)', idx: 8 },
     ],
   },
+  'dna-replikasjon': {
+    id: 'dna-replikasjon',
+    hash: '#dna-replikasjon',
+    title: 'DNA-struktur og replikasjon – Hva DNA er og hvordan det kopieres',
+    dropdownTitle: 'DNA-struktur og replikasjon',
+    dropdownBadge: 'Dobbelheliks & Y-gaffel • Hva DNA er',
+    dropdownDescription:
+      'Fra kromosomer, histoner og nukleotider (A–T og C–G) til hvordan DNA kopierer seg før celledeling – og hvordan mutasjoner skaper evolusjon.',
+    subtitle:
+      'Interaktiv DNA- og replikasjonsgaffel-modell • Fra nukleotid og dobbelheliks til celledeling, mutasjoner og evolusjon',
+    stepWord: 'Steg',
+    showAllLabel: 'Vis hele DNA-modellen',
+    progressiveLabel: 'Stegvis modus',
+    quizTitle: 'Kontrollspørsmål: DNA-struktur og replikasjon',
+    backFromQuizLabel: 'Tilbake til DNA-modellen',
+    summaryHeadingPrefix: 'Hva ser vi her?',
+    traitsHeading: 'Oppbygning, enzymer og nøkkelmekanismer',
+    classroomBoxHeading: 'Husketriks & kobling i timen',
+    examplesHeading: 'Nøkkelbegreper på dette steget',
+    mainStepIds: DNA_MAIN_STEP_IDS,
+    allNodes: DNA_NODES,
+    nodeMap: DNA_NODE_MAP,
+    controlQuestions: DNA_CONTROL_QUESTIONS,
+    mcqQuestions: DNA_MCQ_QUESTIONS,
+    quizShortcuts: [
+      { label: 'Steg 1: 46 kromosomer i kjernen', idx: 0 },
+      { label: 'Steg 3: Nukleotidets 3 deler', idx: 2 },
+      { label: 'Steg 4: Baseparing A–T & C–G', idx: 3 },
+      { label: 'Steg 7: Helikase & replikasjonsgaffel', idx: 6 },
+      { label: 'Steg 8: DNA-polymerase & Okazaki', idx: 7 },
+      { label: 'Steg 9: Mutasjoner & evolusjon', idx: 8 },
+    ],
+  },
   proteinsyntesen: {
     id: 'proteinsyntesen',
     hash: '#proteinsyntesen',
@@ -243,6 +284,7 @@ export const THEME_LIST: ThemeConfig[] = [
   THEMES['kroppens-evolusjon'],
   THEMES.dyrecellen,
   THEMES.plantecellen,
+  THEMES['dna-replikasjon'],
   THEMES.proteinsyntesen,
 ];
 
@@ -264,6 +306,14 @@ export function parseThemeFromHash(hash: string): ThemeId {
     clean === 'eukaryot-plantecelle'
   ) {
     return 'plantecellen';
+  }
+  if (
+    clean === 'dna-replikasjon' ||
+    clean === 'dna' ||
+    clean === 'dna-struktur' ||
+    clean === 'replikasjon'
+  ) {
+    return 'dna-replikasjon';
   }
   if (
     clean === 'proteinsyntesen' ||

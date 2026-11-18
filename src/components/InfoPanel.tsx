@@ -12,6 +12,7 @@ import {
   PersonStanding,
   Sparkles,
   Tag,
+  TreePine,
 } from 'lucide-react';
 import type { ThemeConfig, ThemeId } from '../data/themes';
 import type { TreeNodeData } from '../data/treeOfLifeData';
@@ -344,7 +345,37 @@ export function InfoPanel({
             </button>
           )}
 
-        {/* Bridge button from Cellekjernen / Ribosomer / ER / Golgi (or LUCA) directly to Proteinsyntesen */}
+        {/* Bridge button from Cellekjernen or Steg 1 i Proteinsyntesen directly to DNA-struktur og replikasjon */}
+        {((node.id === 'cell_nucleus' && activeTheme.id === 'dyrecellen') ||
+          (node.id === 'plant_nucleus' && activeTheme.id === 'plantecellen') ||
+          (node.id === 'prot_dna_gene' &&
+            activeTheme.id === 'proteinsyntesen')) && (
+          <button
+            id="btn-bridge-to-dna-replication"
+            type="button"
+            onClick={() => onSwitchTheme('dna-replikasjon')}
+            className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-indigo-500/20 via-sky-500/15 to-emerald-500/15 hover:from-indigo-500/30 hover:to-emerald-500/25 border border-sky-400/45 text-left transition-all cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-sky-400/20 border border-sky-300/40 flex items-center justify-center shrink-0">
+                <Dna className="w-5 h-5 text-sky-300" />
+              </div>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-sky-300">
+                  {activeTheme.id === 'proteinsyntesen'
+                    ? 'Forstå selve DNA-molekylet først'
+                    : 'Zoom helt inn på arvestoffet'}
+                </div>
+                <div className="text-sm font-extrabold text-white font-display">
+                  Utforsk «DNA-struktur og replikasjon» (nukleotider, A–T/C–G & kopiering)
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-sky-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+          </button>
+        )}
+
+        {/* Bridge button from Cellekjernen / Ribosomer / ER / Golgi / DNA-replikasjon (or LUCA) directly to Proteinsyntesen */}
         {(((node.id === 'cell_nucleus' ||
           node.id === 'cell_ribosomes' ||
           node.id === 'cell_er' ||
@@ -354,55 +385,87 @@ export function InfoPanel({
             node.id === 'plant_er_ribosomes' ||
             node.id === 'plant_golgi') &&
             activeTheme.id === 'plantecellen') ||
+          ((node.id === 'dna_double_helix' ||
+            node.id === 'dna_division_evolution') &&
+            activeTheme.id === 'dna-replikasjon') ||
           (node.id === 'luca' && activeTheme.id === 'livets-tre')) && (
           <button
             id="btn-bridge-to-protein-synthesis"
             type="button"
             onClick={() => onSwitchTheme('proteinsyntesen')}
-            className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-sky-500/20 via-teal-500/15 to-amber-500/15 hover:from-sky-500/30 hover:to-amber-500/25 border border-sky-400/45 text-left transition-all cursor-pointer group"
+            className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-sky-500/20 via-teal-500/15 to-amber-500/15 hover:from-sky-500/30 hover:to-amber-500/25 border border-teal-400/45 text-left transition-all cursor-pointer group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-sky-400/20 border border-sky-300/40 flex items-center justify-center shrink-0">
-                <Dna className="w-5 h-5 text-sky-300" />
+              <div className="w-10 h-10 rounded-xl bg-teal-400/20 border border-teal-300/40 flex items-center justify-center shrink-0">
+                <FlaskConical className="w-5 h-5 text-teal-300" />
               </div>
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-sky-300">
-                  Følg oppskriften steg for steg
+                <div className="text-xs font-bold uppercase tracking-wider text-teal-300">
+                  Fra oppskrift til ferdig protein
                 </div>
                 <div className="text-sm font-extrabold text-white font-display">
                   Åpne tidslinjen «Proteinsyntesen» (DNA → mRNA → Protein)
                 </div>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-sky-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-teal-300 shrink-0 group-hover:translate-x-1 transition-transform" />
           </button>
         )}
 
-        {/* Bridge button from Proteinsyntesen back to Eukaryot dyrecelle */}
-        {(node.id === 'prot_nuclear_export' || node.id === 'prot_folding') &&
-          activeTheme.id === 'proteinsyntesen' && (
+        {/* Bridge button from Mutasjoner / Evolusjon i DNA-replikasjon directly to Livets Tre */}
+        {(node.id === 'dna_proofreading_mutation' ||
+          node.id === 'dna_division_evolution') &&
+          activeTheme.id === 'dna-replikasjon' && (
             <button
-              id="btn-bridge-protein-to-cell"
+              id="btn-bridge-dna-to-tree-of-life"
               type="button"
-              onClick={() => onSwitchTheme('dyrecellen')}
-              className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-teal-500/20 via-sky-500/15 to-emerald-500/15 hover:from-teal-500/30 hover:to-emerald-500/25 border border-teal-400/45 text-left transition-all cursor-pointer group"
+              onClick={() => onSwitchTheme('livets-tre')}
+              className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-emerald-500/20 via-amber-500/15 to-teal-500/15 hover:from-emerald-500/30 hover:to-amber-500/25 border border-emerald-400/45 text-left transition-all cursor-pointer group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-teal-400/20 border border-teal-300/40 flex items-center justify-center shrink-0">
-                  <Microscope className="w-5 h-5 text-teal-300" />
+                <div className="w-10 h-10 rounded-xl bg-emerald-400/20 border border-emerald-300/40 flex items-center justify-center shrink-0">
+                  <TreePine className="w-5 h-5 text-emerald-300" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-teal-300">
-                    Se hvor i cellen dette skjer
+                  <div className="text-xs font-bold uppercase tracking-wider text-emerald-300">
+                    Direkte bro til evolusjon
                   </div>
                   <div className="text-sm font-extrabold text-white font-display">
-                    Utforsk kjerne, ribosomer, ER og Golgi i «Eukaryot dyrecelle»
+                    Se hvordan mutasjoner over milliarder av år skapte «Livets Tre»
                   </div>
                 </div>
               </div>
-              <ArrowRight className="w-4 h-4 text-teal-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 text-emerald-300 shrink-0 group-hover:translate-x-1 transition-transform" />
             </button>
           )}
+
+        {/* Bridge button from Proteinsyntesen or DNA-kromosomer back to Eukaryot dyrecelle */}
+        {(((node.id === 'prot_nuclear_export' || node.id === 'prot_folding') &&
+          activeTheme.id === 'proteinsyntesen') ||
+          (node.id === 'dna_chromosomes' &&
+            activeTheme.id === 'dna-replikasjon')) && (
+          <button
+            id="btn-bridge-protein-to-cell"
+            type="button"
+            onClick={() => onSwitchTheme('dyrecellen')}
+            className="w-full flex items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-teal-500/20 via-sky-500/15 to-emerald-500/15 hover:from-teal-500/30 hover:to-emerald-500/25 border border-teal-400/45 text-left transition-all cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-teal-400/20 border border-teal-300/40 flex items-center justify-center shrink-0">
+                <Microscope className="w-5 h-5 text-teal-300" />
+              </div>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-teal-300">
+                  Se hvor i cellen dette ligger
+                </div>
+                <div className="text-sm font-extrabold text-white font-display">
+                  Utforsk cellekjernen og organellene i «Eukaryot dyrecelle»
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-teal-300 shrink-0 group-hover:translate-x-1 transition-transform" />
+          </button>
+        )}
 
         {/* Bridge button from Homo sapiens in Livets Tre directly to Menneskekroppens evolusjonære spor */}
         {node.id === 'homo_sapiens' && activeTheme.id === 'livets-tre' && (
