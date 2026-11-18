@@ -1,6 +1,9 @@
 import {
   ArrowLeft,
   ArrowRight,
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Dna,
   FlaskConical,
@@ -13,7 +16,10 @@ import {
   Sparkles,
   Tag,
   TreePine,
+  X,
 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { lookupGlossaryEntry } from '../data/glossaryData';
 import type { ThemeConfig, ThemeId } from '../data/themes';
 import type { TreeNodeData } from '../data/treeOfLifeData';
 import { NodeVideoPlayer } from './NodeVideoPlayer';
@@ -36,6 +42,22 @@ export function InfoPanel({
   onOpenLightbox,
   onSwitchTheme,
 }: InfoPanelProps) {
+  const [selectedExampleIndex, setSelectedExampleIndex] = useState<number | null>(
+    null,
+  );
+  const glossaryCardRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (selectedExampleIndex === null) return;
+    const frame = requestAnimationFrame(() => {
+      glossaryCardRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selectedExampleIndex]);
+
   const activeMainNodeId = activeTheme.mainStepIds[currentMainStepIndex];
   const activeMainNode = activeTheme.nodeMap[activeMainNodeId];
 
@@ -492,22 +514,132 @@ export function InfoPanel({
           </button>
         )}
 
-        {/* Eksempler / nøkkelbegreper */}
-        <section className="space-y-2 pb-1">
-          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
-            <Tag className="w-3.5 h-3.5" />
-            <h3>{activeTheme.examplesHeading}</h3>
+        {/* Eksempler / nøkkelbegreper med innebygd klikkbar ordbok */}
+        <section className="space-y-2.5 pb-1">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <Tag className="w-3.5 h-3.5" />
+              <h3>{activeTheme.examplesHeading}</h3>
+            </div>
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-300/90">
+              <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Trykk på et begrep for forklaring</span>
+            </span>
           </div>
+
           <div className="flex flex-wrap gap-1.5">
-            {node.examples.map((example) => (
-              <span
-                key={example}
-                className="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700/80 text-xs lg:text-sm text-slate-200 font-medium"
-              >
-                {example}
-              </span>
-            ))}
+            {node.examples.map((example, idx) => {
+              const isSelected = selectedExampleIndex === idx;
+              return (
+                <button
+                  key={example}
+                  type="button"
+                  aria-expanded={isSelected}
+                  onClick={() =>
+                    setSelectedExampleIndex((prev) =>
+                      prev === idx ? null : idx,
+                    )
+                  }
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs lg:text-sm font-medium text-left transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-emerald-500/22 border-emerald-400 text-emerald-100 shadow-[0_0_16px_rgba(16,185,129,0.22)]'
+                      : 'bg-slate-800/90 hover:bg-slate-800 border-slate-700/80 hover:border-emerald-400/55 text-slate-200 hover:text-white'
+                  }`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors ${
+                      isSelected ? 'bg-emerald-300' : 'bg-emerald-400/55'
+                    }`}
+                  />
+                  <span>{example}</span>
+                </button>
+              );
+            })}
           </div>
+
+          {selectedExampleIndex !== null &&
+            node.examples[selectedExampleIndex] !== undefined && (() => {
+              const activeTerm = node.examples[selectedExampleIndex];
+              const entry = lookupGlossaryEntry(
+                activeTerm,
+                activeTheme.dropdownTitle,
+              );
+              const totalTerms = node.examples.length;
+
+              return (
+                <div
+                  ref={glossaryCardRef}
+                  id="glossary-definition-card"
+                  role="region"
+                  aria-label={`Ordbokforklaring for ${activeTerm}`}
+                  className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/16 via-sky-500/10 to-slate-900/90 border border-emerald-400/45 shadow-lg space-y-2 animate-card-enter"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/35 text-[10px] font-bold uppercase tracking-wider text-emerald-200">
+                        <BookOpen className="w-3 h-3 text-emerald-300" />
+                        <span>Ordbok</span>
+                      </span>
+                      <span className="px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-700/80 text-[10px] font-semibold text-sky-200">
+                        {entry.category}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      {totalTerms > 1 && (
+                        <>
+                          <button
+                            type="button"
+                            title="Forrige begrep"
+                            onClick={() =>
+                              setSelectedExampleIndex(
+                                (selectedExampleIndex - 1 + totalTerms) %
+                                  totalTerms,
+                              )
+                            }
+                            className="p-1 rounded-md bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="px-1 text-[10px] font-mono-time text-slate-400">
+                            {selectedExampleIndex + 1}/{totalTerms}
+                          </span>
+                          <button
+                            type="button"
+                            title="Neste begrep"
+                            onClick={() =>
+                              setSelectedExampleIndex(
+                                (selectedExampleIndex + 1) % totalTerms,
+                              )
+                            }
+                            className="p-1 rounded-md bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+                        </>
+                      )}
+                      <button
+                        type="button"
+                        title="Lukk forklaring"
+                        aria-label="Lukk ordbokforklaring"
+                        onClick={() => setSelectedExampleIndex(null)}
+                        className="p-1 rounded-md bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition-colors cursor-pointer ml-0.5"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <h4 className="text-sm lg:text-base font-extrabold text-white font-display leading-snug">
+                    {activeTerm}
+                  </h4>
+
+                  <p className="text-xs lg:text-sm text-slate-100/95 leading-relaxed">
+                    {entry.definition}
+                  </p>
+                </div>
+              );
+            })()}
         </section>
       </div>
     </aside>
