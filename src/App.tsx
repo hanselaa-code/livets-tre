@@ -2,6 +2,11 @@ import { Minimize } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { AnimalCellExplorer } from './components/AnimalCellExplorer';
 import { DnaReplicationExplorer } from './components/DnaReplicationExplorer';
+import {
+  FullscreenClosingSlide,
+  type ClosingReflectionPrompt,
+  type ClosingSlideMode,
+} from './components/FullscreenClosingSlide';
 import { HumanBodyExplorer } from './components/HumanBodyExplorer';
 import { ImageLightbox } from './components/ImageLightbox';
 import { InfoPanel } from './components/InfoPanel';
@@ -19,6 +24,39 @@ import {
   type ThemeId,
 } from './data/themes';
 import type { TreeNodeData } from './data/treeOfLifeData';
+
+const BIOLOGY_REFLECTION_PROMPTS: Record<ThemeId, ClosingReflectionPrompt> = {
+  'livets-tre': {
+    question:
+      'Hvis jorda ble «restartet» for 3,8 milliarder år siden — tror du livets tre ville sett likt ut, og ville mennesker oppstått igjen?',
+    hint: 'Tenk på rollen til tilfeldige mutasjoner, masseutryddelser (som dinosaurenes fall) og naturlig utvalg.',
+  },
+  'kroppens-evolusjon': {
+    question:
+      'Hvilket organsystem i menneskekroppen har flest tydelige «spor» fra vår fortid som fisk i havet?',
+    hint: 'Tenk på ryggraden, gjellebuer på fosterstadiet, lemmer med 5 fingre eller svømmeblære/lunger.',
+  },
+  dyrecellen: {
+    question:
+      'Hvorfor har ikke én enkelt celle bare vokst seg kjempestor i stedet for at dyr består av billioner av bittesmå celler?',
+    hint: 'Tenk på forholdet mellom overflate og volum, transport av oksygen/næring og spesialisering av celler.',
+  },
+  plantecellen: {
+    question:
+      'Hva ville skjedd med alt dyreliv på jorda i løpet av noen måneder hvis kloroplastene i plantecellene plutselig sluttet å virke?',
+    hint: 'Koble fotosyntesen til både oksygenproduksjon og energien i bunnen av alle næringskjeder.',
+  },
+  'dna-replikasjon': {
+    question:
+      'DNA-polymerase gjør nesten ingen feil — men er det egentlig en fordel eller en ulempe for livet på jorda at noen ytterst få kopieringsfeil slipper gjennom?',
+    hint: 'Skill mellom hva en mutasjon betyr for et enkeltindivid (f.eks. kreft) versus for en art over millioner av år (evolusjon).',
+  },
+  proteinsyntesen: {
+    question:
+      'Alle cellene i kroppen din har nøyaktig det samme DNA-et. Hvordan kan da en muskelcelle og en nervecelle lage helt ulike proteiner?',
+    hint: 'Tenk på hvilke gener som skrus «på» og «av» under transkripsjonen.',
+  },
+};
 
 interface ThemeProgressState {
   currentStepIndex: number;
@@ -56,6 +94,9 @@ export function App() {
   const [lightboxNode, setLightboxNode] = useState<TreeNodeData | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isCinemaFallback, setIsCinemaFallback] = useState(false);
+  const [closingSlide, setClosingSlide] = useState<ClosingSlideMode | null>(
+    null,
+  );
 
   const activeTheme = THEMES[activeThemeId];
   const progress = progressByTheme[activeThemeId];
@@ -79,14 +120,23 @@ export function App() {
     const onHashChange = () => {
       const nextTheme = parseThemeFromHash(window.location.hash);
       setActiveThemeId(nextTheme);
+      setClosingSlide(null);
       setIsQuizOpen(false);
+      setLightboxNode(null);
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
+  useEffect(() => {
+    if (!isFullscreen) {
+      setClosingSlide(null);
+    }
+  }, [isFullscreen]);
+
   const handleSelectTheme = useCallback((nextThemeId: ThemeId) => {
     setActiveThemeId(nextThemeId);
+    setClosingSlide(null);
     setIsQuizOpen(false);
     setLightboxNode(null);
     const targetHash =
@@ -107,6 +157,7 @@ export function App() {
     (nextIdx: number) => {
       const mainIds = activeTheme.mainStepIds;
       const clamped = Math.max(0, Math.min(mainIds.length - 1, nextIdx));
+      setClosingSlide(null);
       setProgressByTheme((prev) => {
         const cur = prev[activeThemeId];
         return {
@@ -129,14 +180,27 @@ export function App() {
   const handleNext = useCallback(() => {
     if (isQuizOpen || isQrOpen) return;
 
+    if (isFullscreen && closingSlide === 'summary') {
+      setClosingSlide('questions');
+      return;
+    }
+    if (isFullscreen && closingSlide === 'questions') {
+      setIsQuizOpen(true);
+      return;
+    }
+
     if (currentStepIndex < activeTheme.mainStepIds.length - 1) {
       jumpToStep(currentStepIndex + 1);
+    } else if (isFullscreen) {
+      setClosingSlide('summary');
     } else {
       setIsQuizOpen(true);
     }
   }, [
     activeTheme.mainStepIds.length,
+    closingSlide,
     currentStepIndex,
+    isFullscreen,
     isQrOpen,
     isQuizOpen,
     jumpToStep,
@@ -151,15 +215,31 @@ export function App() {
       setIsQuizOpen(false);
       return;
     }
+    if (isFullscreen && closingSlide === 'questions') {
+      setClosingSlide('summary');
+      return;
+    }
+    if (isFullscreen && closingSlide === 'summary') {
+      setClosingSlide(null);
+      return;
+    }
     if (currentStepIndex > 0) {
       jumpToStep(currentStepIndex - 1);
     }
-  }, [currentStepIndex, isQrOpen, isQuizOpen, jumpToStep]);
+  }, [
+    closingSlide,
+    currentStepIndex,
+    isFullscreen,
+    isQrOpen,
+    isQuizOpen,
+    jumpToStep,
+  ]);
 
   const handleSelectNode = useCallback(
     (nodeId: string) => {
       const target = activeTheme.nodeMap[nodeId];
       if (!target) return;
+      setClosingSlide(null);
       setProgressByTheme((prev) => {
         const cur = prev[activeThemeId];
         return {
@@ -194,6 +274,7 @@ export function App() {
   const handleResetPresentation = useCallback(() => {
     setIsQuizOpen(false);
     setIsQrOpen(false);
+    setClosingSlide(null);
     setProgressByTheme((prev) => ({
       ...prev,
       [activeThemeId]: {
@@ -349,7 +430,7 @@ export function App() {
         </button>
       )}
 
-      {/* Main split classroom stage: Left/Top Interactive Canvas + Right Info Card */}
+      {/* Main split classroom stage: Left/Top Interactive Canvas + Right Info Card, or Fullscreen Closing Slide */}
       <main
         className={`flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 w-full mx-auto ${
           isFullscreen
@@ -357,74 +438,122 @@ export function App() {
             : 'p-3 pb-24 sm:p-4 sm:pb-24 lg:px-6 lg:py-4 lg:pb-4 gap-3.5 sm:gap-4 max-w-[1920px]'
         }`}
       >
-        <section
-          aria-label={activeTheme.title}
-          className="h-[42vh] min-h-[280px] sm:h-[50vh] lg:h-full lg:col-span-7 xl:col-span-7"
-        >
-          {activeThemeId === 'livets-tre' && (
-            <PhylogeneticTree
-              unlockedStepIndex={unlockedStepIndex}
-              showAllSteps={showAllSteps}
-              selectedNodeId={selectedNodeId}
-              onSelectNode={handleSelectNode}
+        {isFullscreen && closingSlide ? (
+          <div className="lg:col-span-12 min-h-0 h-full">
+            <FullscreenClosingSlide
+              mode={closingSlide}
+              themeId={activeThemeId}
+              themeTitle={activeTheme.title}
+              themeSubtitle={activeTheme.subtitle}
+              accent="emerald"
+              steps={activeTheme.mainStepIds.map((id, idx) => {
+                const n = activeTheme.nodeMap[id];
+                return {
+                  stepNumber: idx + 1,
+                  title: n.title,
+                  shortLabel: n.shortLabel,
+                  summaryTitle: n.summaryTitle,
+                  badge: n.timeMa,
+                };
+              })}
+              keyTerms={Array.from(
+                new Set(
+                  activeTheme.mainStepIds.flatMap(
+                    (id) => activeTheme.nodeMap[id]?.examples ?? [],
+                  ),
+                ),
+              )}
+              reviewQuestions={activeTheme.controlQuestions
+                .slice(0, 3)
+                .map((q) => ({
+                  id: q.id,
+                  question: q.question,
+                  hint: q.contextHint,
+                  answerPoints: q.points.map(
+                    (p) => `${p.heading}: ${p.detail}`,
+                  ),
+                }))}
+              reflectionPrompt={
+                BIOLOGY_REFLECTION_PROMPTS[activeThemeId] ?? {
+                  question: `Hva synes du er det mest overraskende eller viktigste ved ${activeTheme.title.toLowerCase()}, og hvordan henger det sammen med livet rundt oss i dag?`,
+                }
+              }
+              onJumpToStep={jumpToStep}
+              onOpenQuiz={() => setIsQuizOpen(true)}
             />
-          )}
-          {activeThemeId === 'kroppens-evolusjon' && (
-            <HumanBodyExplorer
-              unlockedStepIndex={unlockedStepIndex}
-              showAllSteps={showAllSteps}
-              selectedNodeId={selectedNodeId}
-              onSelectNode={handleSelectNode}
-            />
-          )}
-          {activeThemeId === 'dyrecellen' && (
-            <AnimalCellExplorer
-              unlockedStepIndex={unlockedStepIndex}
-              showAllSteps={showAllSteps}
-              selectedNodeId={selectedNodeId}
-              onSelectNode={handleSelectNode}
-            />
-          )}
-          {activeThemeId === 'plantecellen' && (
-            <PlantCellExplorer
-              unlockedStepIndex={unlockedStepIndex}
-              showAllSteps={showAllSteps}
-              selectedNodeId={selectedNodeId}
-              onSelectNode={handleSelectNode}
-            />
-          )}
-          {activeThemeId === 'dna-replikasjon' && (
-            <DnaReplicationExplorer
-              unlockedStepIndex={unlockedStepIndex}
-              showAllSteps={showAllSteps}
-              selectedNodeId={selectedNodeId}
-              onSelectNode={handleSelectNode}
-            />
-          )}
-          {activeThemeId === 'proteinsyntesen' && (
-            <ProteinSynthesisTimeline
-              unlockedStepIndex={unlockedStepIndex}
-              showAllSteps={showAllSteps}
-              selectedNodeId={selectedNodeId}
-              onSelectNode={handleSelectNode}
-            />
-          )}
-        </section>
+          </div>
+        ) : (
+          <>
+            <section
+              aria-label={activeTheme.title}
+              className="h-[42vh] min-h-[280px] sm:h-[50vh] lg:h-full lg:col-span-7 xl:col-span-7"
+            >
+              {activeThemeId === 'livets-tre' && (
+                <PhylogeneticTree
+                  unlockedStepIndex={unlockedStepIndex}
+                  showAllSteps={showAllSteps}
+                  selectedNodeId={selectedNodeId}
+                  onSelectNode={handleSelectNode}
+                />
+              )}
+              {activeThemeId === 'kroppens-evolusjon' && (
+                <HumanBodyExplorer
+                  unlockedStepIndex={unlockedStepIndex}
+                  showAllSteps={showAllSteps}
+                  selectedNodeId={selectedNodeId}
+                  onSelectNode={handleSelectNode}
+                />
+              )}
+              {activeThemeId === 'dyrecellen' && (
+                <AnimalCellExplorer
+                  unlockedStepIndex={unlockedStepIndex}
+                  showAllSteps={showAllSteps}
+                  selectedNodeId={selectedNodeId}
+                  onSelectNode={handleSelectNode}
+                />
+              )}
+              {activeThemeId === 'plantecellen' && (
+                <PlantCellExplorer
+                  unlockedStepIndex={unlockedStepIndex}
+                  showAllSteps={showAllSteps}
+                  selectedNodeId={selectedNodeId}
+                  onSelectNode={handleSelectNode}
+                />
+              )}
+              {activeThemeId === 'dna-replikasjon' && (
+                <DnaReplicationExplorer
+                  unlockedStepIndex={unlockedStepIndex}
+                  showAllSteps={showAllSteps}
+                  selectedNodeId={selectedNodeId}
+                  onSelectNode={handleSelectNode}
+                />
+              )}
+              {activeThemeId === 'proteinsyntesen' && (
+                <ProteinSynthesisTimeline
+                  unlockedStepIndex={unlockedStepIndex}
+                  showAllSteps={showAllSteps}
+                  selectedNodeId={selectedNodeId}
+                  onSelectNode={handleSelectNode}
+                />
+              )}
+            </section>
 
-        <section
-          aria-label="Fagkort for valgt tema"
-          className="lg:h-full lg:col-span-5 xl:col-span-5 min-h-0"
-        >
-          <InfoPanel
-            activeTheme={activeTheme}
-            node={activeNode}
-            currentMainStepIndex={currentStepIndex}
-            isFullscreen={isFullscreen}
-            onSelectNode={handleSelectNode}
-            onOpenLightbox={(node) => setLightboxNode(node)}
-            onSwitchTheme={handleSelectTheme}
-          />
-        </section>
+            <section
+              aria-label="Fagkort for valgt tema"
+              className="lg:h-full lg:col-span-5 xl:col-span-5 min-h-0"
+            >
+              <InfoPanel
+                activeTheme={activeTheme}
+                node={activeNode}
+                currentMainStepIndex={currentStepIndex}
+                isFullscreen={isFullscreen}
+                onSelectNode={handleSelectNode}
+                onOpenLightbox={(node) => setLightboxNode(node)}
+                onSwitchTheme={handleSelectTheme}
+              />
+            </section>
+          </>
+        )}
       </main>
 
       <TimelineDock
@@ -433,9 +562,11 @@ export function App() {
         unlockedStepIndex={unlockedStepIndex}
         showAllSteps={showAllSteps}
         isFullscreen={isFullscreen}
+        closingSlide={closingSlide}
         onPrev={handlePrev}
         onNext={handleNext}
         onJumpToStep={jumpToStep}
+        onSelectClosingSlide={setClosingSlide}
       />
 
       {isQuizOpen && (
