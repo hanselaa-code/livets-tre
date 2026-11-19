@@ -289,7 +289,20 @@ export const THEME_LIST: ThemeConfig[] = [
 ];
 
 export function parseThemeFromHash(hash: string): ThemeId {
-  const clean = hash.replace(/^#/, '').trim().toLowerCase();
+  if (typeof hash !== 'string') {
+    return 'livets-tre';
+  }
+  let decoded = hash;
+  try {
+    decoded = decodeURIComponent(hash);
+  } catch {
+    // Ignore malformed percent-encoding and fall back to raw hash
+  }
+  const clean = decoded
+    .replace(/^#/, '')
+    .replace(/^\/+|\/+$/g, '')
+    .trim()
+    .toLowerCase();
   if (clean === 'kroppens-evolusjon' || clean === 'kroppen') {
     return 'kroppens-evolusjon';
   }

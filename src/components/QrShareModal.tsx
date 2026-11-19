@@ -1,6 +1,6 @@
 import { Check, Copy, QrCode, Smartphone, X } from 'lucide-react';
 import QRCode from 'qrcode';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ThemeConfig } from '../data/themes';
 
 export const PUBLIC_CLASSROOM_URL = 'https://hanselaa-code.github.io/livets-tre/';
@@ -19,10 +19,23 @@ export function QrShareModal({
   const [svgMarkup, setSvgMarkup] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
-  const shareUrl =
-    activeTheme.id === 'livets-tre'
-      ? PUBLIC_CLASSROOM_URL
-      : `${PUBLIC_CLASSROOM_URL}${activeTheme.hash}`;
+  const isStartPage = activeTheme.id === 'livets-tre';
+
+  const shareUrl = useMemo(() => {
+    const targetHash = isStartPage ? '' : activeTheme.hash;
+    if (typeof window !== 'undefined') {
+      const { protocol, hostname, origin, pathname } = window.location;
+      const isPublicWeb =
+        (protocol === 'https:' || protocol === 'http:') &&
+        hostname !== 'localhost' &&
+        hostname !== '127.0.0.1' &&
+        hostname !== '[::1]';
+      if (isPublicWeb) {
+        return `${origin}${pathname}${targetHash}`;
+      }
+    }
+    return `${PUBLIC_CLASSROOM_URL}${targetHash}`;
+  }, [activeTheme.hash, isStartPage]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -84,7 +97,7 @@ export function QrShareModal({
         <div className="space-y-1.5">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/35 text-emerald-300 text-xs font-bold uppercase tracking-wider">
             <QrCode className="w-3.5 h-3.5" />
-            <span>Del tema: {activeTheme.dropdownTitle}</span>
+            <span>{isStartPage ? 'Del startside' : 'Del undertema'}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
             Skann for å åpne på mobil
@@ -92,7 +105,9 @@ export function QrShareModal({
           <p className="text-xs sm:text-sm text-slate-300 flex items-center justify-center gap-1.5">
             <Smartphone className="w-4 h-4 text-amber-300 shrink-0" />
             <span>
-              Åpner direkte i «{activeTheme.dropdownTitle}» på elevenes telefon
+              {isStartPage
+                ? `Åpner startsiden «${activeTheme.title}» på elevenes telefon`
+                : `Åpner undertemaet «${activeTheme.title}» direkte på elevenes telefon`}
             </span>
           </p>
         </div>

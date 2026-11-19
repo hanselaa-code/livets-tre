@@ -117,15 +117,20 @@ export function App() {
   }, [activeTheme.title]);
 
   useEffect(() => {
-    const onHashChange = () => {
+    const syncThemeFromUrl = () => {
       const nextTheme = parseThemeFromHash(window.location.hash);
       setActiveThemeId(nextTheme);
       setClosingSlide(null);
       setIsQuizOpen(false);
+      setIsQrOpen(false);
       setLightboxNode(null);
     };
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
+    window.addEventListener('hashchange', syncThemeFromUrl);
+    window.addEventListener('popstate', syncThemeFromUrl);
+    return () => {
+      window.removeEventListener('hashchange', syncThemeFromUrl);
+      window.removeEventListener('popstate', syncThemeFromUrl);
+    };
   }, []);
 
   useEffect(() => {
@@ -138,13 +143,16 @@ export function App() {
     setActiveThemeId(nextThemeId);
     setClosingSlide(null);
     setIsQuizOpen(false);
+    setIsQrOpen(false);
     setLightboxNode(null);
     const targetHash =
       nextThemeId === 'livets-tre' ? '' : THEMES[nextThemeId].hash;
     try {
       const url = new URL(window.location.href);
-      url.hash = targetHash;
-      window.history.replaceState(null, '', url.toString());
+      if (url.hash !== targetHash) {
+        url.hash = targetHash;
+        window.history.pushState(null, '', url.toString());
+      }
     } catch {
       // Ignore in restricted iframe contexts
     }
