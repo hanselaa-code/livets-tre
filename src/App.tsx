@@ -350,7 +350,13 @@ export function App() {
       )}
 
       {/* Main split classroom stage: Left/Top Interactive Canvas + Right Info Card */}
-      <main className="flex-1 min-h-0 p-3 pb-24 sm:p-4 sm:pb-24 lg:px-6 lg:py-4 lg:pb-4 grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 max-w-[1920px] w-full mx-auto">
+      <main
+        className={`flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 w-full mx-auto ${
+          isFullscreen
+            ? 'p-2 pb-20 sm:p-2.5 sm:pb-20 lg:px-3 lg:py-2 lg:pb-2 gap-2.5'
+            : 'p-3 pb-24 sm:p-4 sm:pb-24 lg:px-6 lg:py-4 lg:pb-4 gap-3.5 sm:gap-4 max-w-[1920px]'
+        }`}
+      >
         <section
           aria-label={activeTheme.title}
           className="h-[42vh] min-h-[280px] sm:h-[50vh] lg:h-full lg:col-span-7 xl:col-span-7"
@@ -413,6 +419,7 @@ export function App() {
             activeTheme={activeTheme}
             node={activeNode}
             currentMainStepIndex={currentStepIndex}
+            isFullscreen={isFullscreen}
             onSelectNode={handleSelectNode}
             onOpenLightbox={(node) => setLightboxNode(node)}
             onSwitchTheme={handleSelectTheme}
@@ -425,6 +432,7 @@ export function App() {
         currentStepIndex={currentStepIndex}
         unlockedStepIndex={unlockedStepIndex}
         showAllSteps={showAllSteps}
+        isFullscreen={isFullscreen}
         onPrev={handlePrev}
         onNext={handleNext}
         onJumpToStep={jumpToStep}

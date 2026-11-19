@@ -2,8 +2,10 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Clock,
   Dna,
   FlaskConical,
@@ -29,6 +31,7 @@ interface InfoPanelProps {
   activeTheme: ThemeConfig;
   node: TreeNodeData;
   currentMainStepIndex: number;
+  isFullscreen?: boolean;
   onSelectNode: (nodeId: string) => void;
   onOpenLightbox: (node: TreeNodeData) => void;
   onSwitchTheme: (themeId: ThemeId) => void;
@@ -38,6 +41,7 @@ export function InfoPanel({
   activeTheme,
   node,
   currentMainStepIndex,
+  isFullscreen = false,
   onSelectNode,
   onOpenLightbox,
   onSwitchTheme,
@@ -45,7 +49,13 @@ export function InfoPanel({
   const [selectedExampleIndex, setSelectedExampleIndex] = useState<number | null>(
     null,
   );
+  const [showAllInFullscreen, setShowAllInFullscreen] = useState(false);
   const glossaryCardRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setShowAllInFullscreen(false);
+    setSelectedExampleIndex(null);
+  }, [node.id, isFullscreen]);
 
   useEffect(() => {
     if (selectedExampleIndex === null) return;
@@ -71,6 +81,7 @@ export function InfoPanel({
   });
 
   const isTreeTheme = activeTheme.id === 'livets-tre';
+  const isCompactFullscreen = isFullscreen && !showAllInFullscreen;
 
   return (
     <aside
@@ -79,10 +90,16 @@ export function InfoPanel({
       className="h-full flex flex-col rounded-2xl glass-panel overflow-hidden animate-card-enter"
     >
       {/* Scrollable content body */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar p-5 lg:p-6 space-y-5">
+      <div
+        className={`flex-1 overflow-y-auto custom-scrollbar ${
+          isCompactFullscreen
+            ? 'p-3.5 lg:p-4 flex flex-col gap-2.5'
+            : 'p-5 lg:p-6 space-y-5'
+        }`}
+      >
         {/* Back to main path banner when exploring a side branch in Livets Tre */}
         {!node.isMainPath && activeMainNode && (
-          <div className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-amber-500/10 border border-amber-400/25 text-xs">
+          <div className="flex items-center justify-between gap-3 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-400/25 text-xs shrink-0">
             <div className="flex items-center gap-2 text-amber-200 font-medium">
               <GitBranch className="w-4 h-4 text-amber-400 shrink-0" />
               <span>Sidegren som splitter av fra hovedstien</span>
@@ -100,41 +117,97 @@ export function InfoPanel({
         )}
 
         {/* Header badges + Title + Latin name */}
-        <header className="space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
+        <header className={isCompactFullscreen ? 'space-y-1 shrink-0' : 'space-y-2'}>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {node.isMainPath ? (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/20 border border-emerald-400/35 text-emerald-300 text-xs font-bold tracking-wide uppercase">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-md bg-emerald-500/20 border border-emerald-400/35 text-emerald-300 font-bold tracking-wide uppercase ${
+                  isCompactFullscreen ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs'
+                }`}
+              >
                 {activeTheme.stepWord} {node.stepNumber} av{' '}
                 {activeTheme.mainStepIds.length}
-                {isTreeTheme ? ' • Hovedsti' : ''}
+                {isTreeTheme && !isCompactFullscreen ? ' • Hovedsti' : ''}
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-500/20 border border-sky-400/35 text-sky-200 text-xs font-bold tracking-wide uppercase">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-md bg-sky-500/20 border border-sky-400/35 text-sky-200 font-bold tracking-wide uppercase ${
+                  isCompactFullscreen ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs'
+                }`}
+              >
                 Sidegren
               </span>
             )}
 
             {node.traceBadge && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-500/15 border border-sky-400/35 text-sky-200 text-xs font-bold">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-md bg-sky-500/15 border border-sky-400/35 text-sky-200 font-bold ${
+                  isCompactFullscreen ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs'
+                }`}
+              >
                 {node.traceBadge}
               </span>
             )}
 
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold font-mono-time">
-              <Clock className="w-3.5 h-3.5" />
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-md bg-amber-500/15 border border-amber-400/30 text-amber-300 font-semibold font-mono-time ${
+                isCompactFullscreen ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs'
+              }`}
+            >
+              <Clock className="w-3 h-3" />
               {node.timeMa}
             </span>
 
-            <span className="text-xs text-slate-400 font-medium">
-              {node.eraLabel}
-            </span>
+            {!isCompactFullscreen && (
+              <span className="text-xs text-slate-400 font-medium">
+                {node.eraLabel}
+              </span>
+            )}
+
+            {isFullscreen && (
+              <button
+                id="btn-toggle-fullscreen-details"
+                type="button"
+                onClick={() => setShowAllInFullscreen((prev) => !prev)}
+                className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-800/90 hover:bg-slate-700/90 border border-slate-600/80 text-[11px] font-semibold text-emerald-200 transition-colors cursor-pointer"
+                title={
+                  isCompactFullscreen
+                    ? 'Vis alle detaljer på kortet'
+                    : 'Tilbake til kompakt fullskjermvisning'
+                }
+              >
+                {isCompactFullscreen ? (
+                  <>
+                    <span>Vis alt</span>
+                    <ChevronDown className="w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    <span>Kompakt</span>
+                    <ChevronUp className="w-3 h-3" />
+                  </>
+                )}
+              </button>
+            )}
           </div>
 
           <div>
-            <h2 className="text-2xl lg:text-[1.75rem] font-extrabold text-white leading-tight font-display">
+            <h2
+              className={`font-extrabold text-white leading-tight font-display ${
+                isCompactFullscreen
+                  ? 'text-[clamp(1.1rem,2.3vh,1.55rem)]'
+                  : 'text-2xl lg:text-[1.75rem]'
+              }`}
+            >
               {node.title}
             </h2>
-            <p className="text-sm lg:text-base italic text-slate-300 font-medium mt-0.5">
+            <p
+              className={`italic text-slate-300 font-medium mt-0.5 ${
+                isCompactFullscreen
+                  ? 'text-[clamp(0.74rem,1.4vh,0.88rem)] truncate'
+                  : 'text-sm lg:text-base'
+              }`}
+            >
               {node.latinName}
             </p>
           </div>
@@ -145,11 +218,16 @@ export function InfoPanel({
           <NodeVideoPlayer
             node={node}
             videoUrl={node.videoUrl}
+            compact={isCompactFullscreen}
             onOpenLightbox={onOpenLightbox}
           />
         ) : (
-          <figure className="relative group rounded-xl overflow-hidden border border-slate-700/70 bg-slate-900 shadow-lg">
-            <div className="aspect-video w-full overflow-hidden bg-slate-950">
+          <figure className="relative group rounded-xl overflow-hidden border border-slate-700/70 bg-slate-900 shadow-lg shrink-0">
+            <div
+              className={`w-full overflow-hidden bg-slate-950 ${
+                isCompactFullscreen ? 'h-[clamp(135px,27vh,260px)]' : 'aspect-video'
+              }`}
+            >
               <img
                 src={node.image}
                 alt={`${node.title} (${node.latinName})`}
@@ -162,32 +240,48 @@ export function InfoPanel({
               type="button"
               onClick={() => onOpenLightbox(node)}
               title="Forstørr bilde for storskjerm"
-              className="absolute top-2.5 right-2.5 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-950/75 hover:bg-slate-900/95 text-slate-200 text-xs font-medium border border-white/15 opacity-90 group-hover:opacity-100 transition-all cursor-pointer"
+              className="absolute top-2 right-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-950/75 hover:bg-slate-900/95 text-slate-200 text-xs font-medium border border-white/15 opacity-90 group-hover:opacity-100 transition-all cursor-pointer"
             >
               <Maximize2 className="w-3.5 h-3.5" />
               <span>Storskjermbilde</span>
             </button>
-            <figcaption className="px-3.5 py-2 bg-slate-950/85 text-xs text-slate-300 border-t border-slate-800/80 leading-relaxed">
-              {node.imageCaption}
-            </figcaption>
+            {!isCompactFullscreen && (
+              <figcaption className="px-3.5 py-2 bg-slate-950/85 text-xs text-slate-300 border-t border-slate-800/80 leading-relaxed">
+                {node.imageCaption}
+              </figcaption>
+            )}
           </figure>
         )}
 
         {/* Main pedagogical summary */}
-        <section className="space-y-2">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-300">
-            <Sparkles className="w-4 h-4 text-emerald-400" />
-            <h3>
+        <section className={isCompactFullscreen ? 'space-y-1 shrink-0' : 'space-y-2'}>
+          <div
+            className={`flex items-center gap-1.5 font-bold uppercase tracking-wider text-emerald-300 ${
+              isCompactFullscreen ? 'text-[11px]' : 'text-xs gap-2'
+            }`}
+          >
+            <Sparkles
+              className={`text-emerald-400 shrink-0 ${
+                isCompactFullscreen ? 'w-3.5 h-3.5' : 'w-4 h-4'
+              }`}
+            />
+            <h3 className={isCompactFullscreen ? 'truncate' : ''}>
               {activeTheme.summaryHeadingPrefix} — {node.summaryTitle}
             </h3>
           </div>
-          <p className="text-[15px] lg:text-base text-slate-200 leading-relaxed">
+          <p
+            className={`text-slate-200 ${
+              isCompactFullscreen
+                ? 'text-[clamp(0.82rem,1.65vh,0.98rem)] leading-snug'
+                : 'text-[15px] lg:text-base leading-relaxed'
+            }`}
+          >
             {node.whatHappens}
           </p>
         </section>
 
         {/* Optional hands-on classroom test / memory hook */}
-        {node.classroomTest && (
+        {!isCompactFullscreen && node.classroomTest && (
           <section className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/15 via-teal-500/10 to-transparent border border-emerald-400/35 space-y-1.5">
             <div className="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider">
               <FlaskConical className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -199,13 +293,15 @@ export function InfoPanel({
           </section>
         )}
 
-        {/* Key biological traits / mechanisms */}
-        <section className="space-y-2.5">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-            {activeTheme.traitsHeading}
-          </h3>
-          <div className="grid grid-cols-1 gap-2.5">
-            {node.keyTraits.map((trait) => (
+        {/* Key biological traits / mechanisms and secondary sections */}
+        {!isCompactFullscreen && (
+          <>
+          <section className="space-y-2.5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              {activeTheme.traitsHeading}
+            </h3>
+            <div className="grid grid-cols-1 gap-2.5">
+              {node.keyTraits.map((trait) => (
               <div
                 key={trait.title}
                 className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/75 border border-slate-700/60 hover:border-emerald-500/35 transition-colors"
@@ -513,18 +609,32 @@ export function InfoPanel({
             <ArrowRight className="w-4 h-4 text-emerald-300 shrink-0 group-hover:translate-x-1 transition-transform" />
           </button>
         )}
+          </>
+        )}
 
         {/* Eksempler / nøkkelbegreper med innebygd klikkbar ordbok */}
-        <section className="space-y-2.5 pb-1">
+        <section
+          className={
+            isCompactFullscreen
+              ? 'space-y-1.5 mt-auto pt-1 shrink-0'
+              : 'space-y-2.5 pb-1'
+          }
+        >
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div
+              className={`flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-400 ${
+                isCompactFullscreen ? 'text-[11px]' : 'text-xs'
+              }`}
+            >
               <Tag className="w-3.5 h-3.5" />
               <h3>{activeTheme.examplesHeading}</h3>
             </div>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-300/90">
-              <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Trykk på et begrep for forklaring</span>
-            </span>
+            {!isCompactFullscreen && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-300/90">
+                <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Trykk på et begrep for forklaring</span>
+              </span>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-1.5">
@@ -540,7 +650,11 @@ export function InfoPanel({
                       prev === idx ? null : idx,
                     )
                   }
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs lg:text-sm font-medium text-left transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 rounded-lg border font-medium text-left transition-all cursor-pointer ${
+                    isCompactFullscreen
+                      ? 'px-2 py-1 text-[11px]'
+                      : 'px-2.5 py-1.5 text-xs lg:text-sm'
+                  } ${
                     isSelected
                       ? 'bg-emerald-500/22 border-emerald-400 text-emerald-100 shadow-[0_0_16px_rgba(16,185,129,0.22)]'
                       : 'bg-slate-800/90 hover:bg-slate-800 border-slate-700/80 hover:border-emerald-400/55 text-slate-200 hover:text-white'

@@ -82,7 +82,13 @@ export function TopBar({
   const ActiveIcon = getThemeIcon(activeTheme.id);
 
   return (
-    <header className="relative z-30 flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 lg:px-6 py-2.5 sm:py-3 border-b border-slate-800/80 bg-[#090E1A]/90 backdrop-blur-md">
+    <header
+      className={`relative z-30 flex items-center justify-between gap-2 sm:gap-3 border-b border-slate-800/80 bg-[#090E1A]/90 backdrop-blur-md ${
+        isFullscreen
+          ? 'px-2.5 sm:px-3.5 py-1.5'
+          : 'px-3 sm:px-4 lg:px-6 py-2.5 sm:py-3'
+      }`}
+    >
       {/* Left: Brand & Interactive Theme Switcher Dropdown */}
       <div ref={dropdownRef} className="relative flex items-center gap-2.5 sm:gap-3 min-w-0">
         <button

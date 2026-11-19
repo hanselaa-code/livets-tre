@@ -7,6 +7,7 @@ interface TimelineDockProps {
   currentStepIndex: number;
   unlockedStepIndex: number;
   showAllSteps: boolean;
+  isFullscreen?: boolean;
   onPrev: () => void;
   onNext: () => void;
   onJumpToStep: (stepIndex: number) => void;
@@ -17,6 +18,7 @@ export function TimelineDock({
   currentStepIndex,
   unlockedStepIndex,
   showAllSteps,
+  isFullscreen = false,
   onPrev,
   onNext,
   onJumpToStep,
@@ -31,7 +33,11 @@ export function TimelineDock({
   const currentStepNode = nodeMap[mainStepIds[currentStepIndex]];
 
   return (
-    <footer className="fixed bottom-0 inset-x-0 lg:static z-30 border-t border-slate-700/80 lg:border-slate-800/85 bg-[#090E1A]/95 backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,0,0,0.65)] lg:shadow-none pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-2.5 px-3 sm:px-5 lg:py-3 lg:px-6">
+    <footer
+      className={`fixed bottom-0 inset-x-0 lg:static z-30 border-t border-slate-700/80 lg:border-slate-800/85 bg-[#090E1A]/95 backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,0,0,0.65)] lg:shadow-none pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-2.5 px-3 sm:px-5 ${
+        isFullscreen ? 'lg:py-1.5 lg:px-3' : 'lg:py-3 lg:px-6'
+      }`}
+    >
       {/* Optional mobile quick-jump step drawer when tapping center step indicator */}
       {mobileStepMenuOpen && (
         <div className="md:hidden mb-2.5 p-2.5 rounded-2xl bg-slate-900/95 border border-slate-700/80 max-h-56 overflow-y-auto custom-scrollbar grid grid-cols-2 gap-1.5 animate-card-enter">
@@ -73,7 +79,11 @@ export function TimelineDock({
         </div>
       )}
 
-      <div className="max-w-[1920px] mx-auto flex items-center justify-between gap-2 sm:gap-3">
+      <div
+        className={`mx-auto flex items-center justify-between gap-2 sm:gap-3 ${
+          isFullscreen ? 'w-full' : 'max-w-[1920px]'
+        }`}
+      >
         {/* Previous button */}
         <button
           id="btn-prev-step"
@@ -81,7 +91,9 @@ export function TimelineDock({
           onClick={onPrev}
           disabled={isFirstStep}
           aria-label="Forrige steg"
-          className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 min-h-[46px] px-3.5 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition-all shrink-0 ${
+          className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 rounded-xl text-xs sm:text-sm font-bold border transition-all shrink-0 ${
+            isFullscreen ? 'min-h-[38px] py-1.5' : 'min-h-[46px] py-2.5'
+          } ${
             isFirstStep
               ? 'bg-slate-900/40 border-slate-800/60 text-slate-600 cursor-not-allowed'
               : 'bg-slate-900 hover:bg-slate-800 active:bg-slate-800 border-slate-700 text-slate-100 cursor-pointer active:scale-[0.97]'
@@ -108,7 +120,9 @@ export function TimelineDock({
                 type="button"
                 onClick={() => onJumpToStep(idx)}
                 title={`${activeTheme.stepWord} ${idx + 1}: ${stepNode.title} (${stepNode.timeMa})`}
-                className={`group flex flex-col items-center px-2 lg:px-2.5 py-1 rounded-xl border transition-all cursor-pointer ${
+                className={`group flex flex-col items-center px-2 lg:px-2.5 rounded-xl border transition-all cursor-pointer ${
+                  isFullscreen ? 'py-0.5' : 'py-1'
+                } ${
                   isCurrent
                     ? 'bg-emerald-500/20 border-emerald-400/50 text-white shadow-[0_0_15px_rgba(16,185,129,0.2)]'
                     : isUnlocked
@@ -171,7 +185,9 @@ export function TimelineDock({
           id="btn-next-step"
           type="button"
           onClick={onNext}
-          className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 min-h-[46px] px-4 sm:px-5 py-2.5 rounded-xl text-sm font-extrabold transition-all cursor-pointer active:scale-[0.97] ${
+          className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-5 rounded-xl text-sm font-extrabold transition-all cursor-pointer active:scale-[0.97] ${
+            isFullscreen ? 'min-h-[38px] py-1.5' : 'min-h-[46px] py-2.5'
+          } ${
             isLastStep
               ? 'bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 shadow-[0_0_25px_rgba(245,158,11,0.4)]'
               : 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-[0_0_24px_rgba(16,185,129,0.35)]'
